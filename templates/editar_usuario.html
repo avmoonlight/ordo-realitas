@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Usuário</title>
+</head>
+<body>
+  <h1>Editar Usuário</h1>
+
+  <form method="POST" enctype="multipart/form-data">
+    <label>Username:</label><br>
+    <input type="text" name="username" value="{{ usuario.username }}" required><br><br>
+
+    <label>Senha:</label><br>
+    <input type="password" name="senha" value="{{ usuario.senha }}" required><br><br>
+
+    <label>Imagem:</label><br>
+    <input type="file" name="imagem"><br><br>
+
+    <button type="submit">Salvar Alterações</button>
+  </form>
+
+  <p><a href="{{ url_for('usuarios') }}">Voltar</a></p>
+</body>
+</html>

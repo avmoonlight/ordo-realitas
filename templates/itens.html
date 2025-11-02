@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Itens Paranormais</title>
+</head>
+<body>
+  <h1>Criar Item Paranormal</h1>
+
+  <form method="POST" enctype="multipart/form-data">
+    Nome: <input type="text" name="nome" required><br>
+    Elemento: <input type="text" name="elemento"><br>
+    Efeito: <input type="text" name="efeito"><br>
+    Num. Categórico: <input type="text" name="num_categorico"><br>
+    Raridade: <input type="text" name="raridade"><br>
+    Imagem: <input type="file" name="imagem"><br>
+    <button type="submit">Salvar</button>
+  </form>
+
+  <hr>
+  <h2>Itens Cadastrados</h2>
+  {% for item in itens %}
+    <p><strong>{{ item.nome }}</strong> ({{ item.raridade }})</p>
+    {% if item.imagem %}
+      <img src="{{ url_for('static', filename=item.imagem) }}" width="80"><br>
+    {% endif %}
+    <a href="{{ url_for('editar_item', id=item.id) }}">Editar</a> |
+    <a href="{{ url_for('deletar_item', id=item.id) }}">Excluir</a>
+    <hr>
+  {% endfor %}
+</body>
+</html>

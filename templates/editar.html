@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Agente</title>
+</head>
+<body>
+  <h1>Editar Agente</h1>
+
+  <form method="POST" enctype="multipart/form-data">
+    Nome: <input type="text" name="nome" value="{{ agente.nome }}" required><br>
+    Sobrenome: <input type="text" name="sobrenome" value="{{ agente.sobrenome }}"><br>
+    Data Nasc: <input type="date" name="data_nasc" value="{{ agente.data_nasc }}"><br>
+    Contato Emergência: <input type="text" name="contato_emergencia" value="{{ agente.contato_emergencia }}"><br>
+    Elemento: <input type="text" name="elemento" value="{{ agente.elemento }}"><br>
+    Classe: <input type="text" name="classe" value="{{ agente.classe }}"><br>
+    Observações: <input type="text" name="observacoes" value="{{ agente.observacoes }}"><br>
+    Ocupação: <input type="text" name="ocupacao" value="{{ agente.ocupacao }}"><br>
+    Marca: <input type="text" name="marca" value="{{ agente.marca }}"><br>
+    Equipe: <input type="text" name="equipe" value="{{ agente.equipe }}"><br>
+    Status: <select name="status">
+      <option value="VIVO" {% if agente.status == "VIVO" %}selected{% endif %}>Vivo</option>
+      <option value="MORTO" {% if agente.status == "MORTO" %}selected{% endif %}>Morto</option>
+    </select><br>
+    Imagem: <input type="file" name="imagem"><br><br>
+    <button type="submit">Salvar Alterações</button>
+  </form>
+
+  <p><a href="{{ url_for('agentes') }}">Voltar</a></p>
+</body>
+</html>

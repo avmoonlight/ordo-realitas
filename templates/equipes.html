@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Equipes</title>
+</head>
+<body>
+  <h1>Equipes</h1>
+
+  {% if equipes_com_agentes %}
+    {% for grupo in equipes_com_agentes %}
+      <h2>{{ grupo.nome_equipe }}</h2>
+      <ul>
+        {% for membro in grupo.membros %}
+          <li>
+            {% if membro.imagem %}
+              <img src="{{ url_for('static', filename=membro.imagem) }}" width="80"><br>
+            {% endif %}
+            {{ membro.nome }} {{ membro.sobrenome }}
+          </li>
+        {% endfor %}
+      </ul>
+      <hr>
+    {% endfor %}
+  {% else %}
+    <p>Nenhuma equipe encontrada.</p>
+  {% endif %}
+
+  <p><a href="{{ url_for('dashboard') }}">Voltar</a></p>
+</body>
+</html>

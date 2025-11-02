@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Criaturas</title>
+</head>
+<body>
+  <h1>Criar Criatura</h1>
+
+  <form method="POST" enctype="multipart/form-data">
+    Nome: <input type="text" name="nome" required><br>
+    Elemento: <input type="text" name="elemento"><br>
+    Local Encontrado: <input type="text" name="local_encontrado"><br>
+    Descrição: <input type="text" name="descricao"><br>
+    Raridade: <input type="text" name="raridade"><br>
+    Imagem: <input type="file" name="imagem"><br>
+    <button type="submit">Salvar</button>
+  </form>
+
+  <hr>
+  <h2>Criaturas Cadastradas</h2>
+  {% for criatura in criaturas %}
+    <p><strong>{{ criatura.nome }}</strong> ({{ criatura.raridade }})</p>
+    {% if criatura.imagem %}
+      <img src="{{ url_for('static', filename=criatura.imagem) }}" width="80"><br>
+    {% endif %}
+    <a href="{{ url_for('editar_criatura', id=criatura.id) }}">Editar</a> |
+    <a href="{{ url_for('deletar_criatura', id=criatura.id) }}">Excluir</a>
+    <hr>
+  {% endfor %}
+</body>
+</html>

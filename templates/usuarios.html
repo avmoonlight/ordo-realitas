@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Usuários - C.R.I.S</title>
+</head>
+<body>
+  <h1>Usuários Cadastrados</h1>
+
+  <a href="{{ url_for('criar_usuario') }}">Cadastrar Novo Usuário</a><br><br>
+
+  {% for usuario in usuarios %}
+    <div>
+      <p>ID: {{ usuario.id }}</p>
+      <p>Username: {{ usuario.username }}</p>
+      {% if usuario.imagem %}
+        <img src="{{ url_for('static', filename=usuario.imagem) }}" width="80">
+      {% endif %}
+      <p><a href="{{ url_for('editar_usuario', id=usuario.id) }}">Editar</a> | 
+         <a href="{{ url_for('deletar_usuario', id=usuario.id) }}">Excluir</a></p>
+    </div>
+    <hr>
+  {% endfor %}
+
+  <p><a href="{{ url_for('dashboard') }}">Voltar</a></p>
+</body>
+</html>
