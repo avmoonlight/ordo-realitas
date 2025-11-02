@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Excluir Criatura</title>
+</head>
+<body>
+    <h1>Excluir Criatura</h1>
+    <p>Tem certeza que deseja excluir a criatura <strong>{{ criatura.nome }}</strong>?</p>
+    <form method="POST">
+        <button type="submit">Sim, excluir</button>
+        <a href="{{ url_for('criaturas') }}">Cancelar</a>
+    </form>
+</body>
+</html>

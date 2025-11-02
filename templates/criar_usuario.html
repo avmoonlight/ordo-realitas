@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Criar Usuário</title>
+    <meta charset="UTF-8">
+    <title>Criar Usuário</title>
 </head>
 <body>
-  <h1>Criar Novo Usuário</h1>
+    <h1>Criar Novo Usuário</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <label>Username:</label>
+        <input type="text" name="username" required><br>
 
-  <form method="POST" enctype="multipart/form-data">
-    <label>Username:</label><br>
-    <input type="text" name="username" required><br><br>
+        <label>Senha:</label>
+        <input type="password" name="senha" required><br>
 
-    <label>Senha:</label><br>
-    <input type="password" name="senha" required><br><br>
+        <label>Imagem (opcional):</label>
+        <input type="file" name="imagem"><br>
 
-    <label>Imagem:</label><br>
-    <input type="file" name="imagem"><br><br>
+        <button type="submit">Salvar Usuário</button>
+    </form>
 
-    <button type="submit">Salvar</button>
-  </form>
-
-  <p><a href="{{ url_for('usuarios') }}">Voltar</a></p>
+    <hr>
+    <a href="{{ url_for('usuarios') }}">Voltar</a>
 </body>
 </html>

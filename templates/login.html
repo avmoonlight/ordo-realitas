@@ -2,14 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Login - C.R.I.S</title>
+  <title>Login</title>
 </head>
 <body>
   <h1>Login</h1>
-
-  <form method="POST">
-    <label>Username:</label><br>
-    <input type="text" name="user_id" required><br><br>
+  <form method="POST" action="/login">
+    <label>Usuário:</label><br>
+    <input type="text" name="username" required><br><br>
 
     <label>Senha:</label><br>
     <input type="password" name="senha" required><br><br>
@@ -17,14 +16,8 @@
     <button type="submit">Entrar</button>
   </form>
 
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <ul>
-        {% for msg in messages %}
-          <li>{{ msg }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
+  {% if erro %}
+    <p style="color:red;">{{ erro }}</p>
+  {% endif %}
 </body>
 </html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Criatura</title>
+</head>
+<body>
+    <h1>Editar Criatura</h1>
+    <a href="{{ url_for('criaturas') }}">Voltar</a>
+    <hr>
+
+    <form method="POST">
+        <label>Nome:</label><input type="text" name="nome" value="{{ criatura.nome }}" required><br>
+        <label>Elemento:</label><input type="text" name="elemento" value="{{ criatura.elemento }}"><br>
+        <label>Local Encontrado:</label><input type="text" name="local_encontrado" value="{{ criatura.local_encontrado }}"><br>
+        <label>Descrição:</label><textarea name="descricao">{{ criatura.descricao }}</textarea><br>
+        <label>Raridade:</label>
+        <select name="raridade">
+            <option {% if criatura.raridade == 'COMUM' %}selected{% endif %}>COMUM</option>
+            <option {% if criatura.raridade == 'RARO' %}selected{% endif %}>RARO</option>
+            <option {% if criatura.raridade == 'MUITO RARO' %}selected{% endif %}>MUITO RARO</option>
+            <option {% if criatura.raridade == 'RELÍQUIA' %}selected{% endif %}>RELÍQUIA</option>
+        </select><br>
+        <button type="submit">Salvar Alterações</button>
+    </form>
+</body>
+</html>

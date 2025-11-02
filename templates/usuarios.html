@@ -1,27 +1,39 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Usuários - C.R.I.S</title>
+    <meta charset="UTF-8">
+    <title>Usuários</title>
 </head>
 <body>
-  <h1>Usuários Cadastrados</h1>
+    <h1>Lista de Usuários</h1>
+    <a href="{{ url_for('criar_usuario') }}">+ Criar Novo Usuário</a>
+    <br><br>
 
-  <a href="{{ url_for('criar_usuario') }}">Cadastrar Novo Usuário</a><br><br>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Imagem</th>
+            <th>Username</th>
+            <th>Ações</th>
+        </tr>
+        {% for u in usuarios %}
+        <tr>
+            <td>{{ u.id }}</td>
+            <td>
+                {% if u.imagem %}
+                    <img src="{{ url_for('static', filename=u.imagem) }}" width="60">
+                {% endif %}
+            </td>
+            <td>{{ u.username }}</td>
+            <td>
+                <a href="{{ url_for('editar_usuario', id=u.id) }}">Editar</a> |
+                <a href="{{ url_for('deletar_usuario', id=u.id) }}">Excluir</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
 
-  {% for usuario in usuarios %}
-    <div>
-      <p>ID: {{ usuario.id }}</p>
-      <p>Username: {{ usuario.username }}</p>
-      {% if usuario.imagem %}
-        <img src="{{ url_for('static', filename=usuario.imagem) }}" width="80">
-      {% endif %}
-      <p><a href="{{ url_for('editar_usuario', id=usuario.id) }}">Editar</a> | 
-         <a href="{{ url_for('deletar_usuario', id=usuario.id) }}">Excluir</a></p>
-    </div>
     <hr>
-  {% endfor %}
-
-  <p><a href="{{ url_for('dashboard') }}">Voltar</a></p>
+    <a href="{{ url_for('dashboard') }}">Voltar ao Dashboard</a>
 </body>
 </html>

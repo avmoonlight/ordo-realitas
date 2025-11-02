@@ -1,25 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Editar Usuário</title>
+    <meta charset="UTF-8">
+    <title>Editar Usuário</title>
 </head>
 <body>
-  <h1>Editar Usuário</h1>
+    <h1>Editar Usuário</h1>
 
-  <form method="POST" enctype="multipart/form-data">
-    <label>Username:</label><br>
-    <input type="text" name="username" value="{{ usuario.username }}" required><br><br>
+    <form method="POST" enctype="multipart/form-data">
+        <label>Username:</label>
+        <input type="text" name="username" value="{{ usuario.username }}" required><br>
 
-    <label>Senha:</label><br>
-    <input type="password" name="senha" value="{{ usuario.senha }}" required><br><br>
+        <label>Senha:</label>
+        <input type="password" name="senha" placeholder="(deixe em branco para manter a atual)"><br>
 
-    <label>Imagem:</label><br>
-    <input type="file" name="imagem"><br><br>
+        <label>Imagem Atual:</label><br>
+        {% if usuario.imagem %}
+            <img src="{{ url_for('static', filename=usuario.imagem) }}" width="80"><br>
+        {% endif %}
 
-    <button type="submit">Salvar Alterações</button>
-  </form>
+        <label>Nova Imagem (opcional):</label>
+        <input type="file" name="imagem"><br>
 
-  <p><a href="{{ url_for('usuarios') }}">Voltar</a></p>
+        <button type="submit">Salvar Alterações</button>
+    </form>
+
+    <hr>
+    <a href="{{ url_for('usuarios') }}">Voltar</a>
 </body>
 </html>

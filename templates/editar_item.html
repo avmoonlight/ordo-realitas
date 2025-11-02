@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Item Paranormal</title>
+</head>
+<body>
+    <h1>Editar Item Paranormal</h1>
+    <a href="{{ url_for('itens') }}">Voltar</a>
+    <hr>
+
+    <form method="POST">
+        <label>Nome:</label><input type="text" name="nome" value="{{ item.nome }}" required><br>
+        <label>Elemento:</label><input type="text" name="elemento" value="{{ item.elemento }}"><br>
+        <label>Efeito:</label><textarea name="efeito">{{ item.efeito }}</textarea><br>
+        <label>Número Categórico:</label><input type="text" name="num_categorico" value="{{ item.num_categorico }}"><br>
+        <label>Raridade:</label>
+        <select name="raridade">
+            <option {% if item.raridade == 'COMUM' %}selected{% endif %}>COMUM</option>
+            <option {% if item.raridade == 'RARO' %}selected{% endif %}>RARO</option>
+            <option {% if item.raridade == 'MUITO RARO' %}selected{% endif %}>MUITO RARO</option>
+            <option {% if item.raridade == 'RELÍQUIA' %}selected{% endif %}>RELÍQUIA</option>
+        </select><br>
+        <button type="submit">Salvar Alterações</button>
+    </form>
+</body>
+</html>

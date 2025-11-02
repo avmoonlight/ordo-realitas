@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Excluir Item</title>
+</head>
+<body>
+    <h1>Excluir Item Paranormal</h1>
+    <p>Tem certeza que deseja excluir o item <strong>{{ item.nome }}</strong>?</p>
+    <form method="POST">
+        <button type="submit">Sim, excluir</button>
+        <a href="{{ url_for('itens') }}">Cancelar</a>
+    </form>
+</body>
+</html>

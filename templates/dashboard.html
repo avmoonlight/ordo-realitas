@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard - C.R.I.S</title>
+    <meta charset="UTF-8">
+    <title>Dashboard — Painel Administrativo</title>
 </head>
 <body>
-  <h1>Dashboard do Sistema C.R.I.S</h1>
+    <h1>Bem-vindo ao Painel Administrativo</h1>
+    <p>Você está logado como <strong>{{ session['usuario'] }}</strong>.</p>
 
-  <p>Bem-vindo, {{ session['usuario'] }}</p>
+    <hr>
+    <h2>Gerenciamento</h2>
+    <ul>
+        <li><a href="{{ url_for('usuarios') }}">Usuários</a></li>
+        <li><a href="{{ url_for('criar_usuario') }}">Criar Novo Usuário</a></li>
+        <li><a href="{{ url_for('agentes') }}">Agentes</a></li>
+        <li><a href="{{ url_for('equipes') }}">Equipes</a></li>
+        <li><a href="{{ url_for('criaturas') }}">Criaturas</a></li>
+        <li><a href="{{ url_for('itens') }}">Itens Paranormais</a></li>
+    </ul>
 
-  {% if admin %}
-  <h2>Menu de Superusuário</h2>
-  <ul>
-    <li><a href="{{ url_for('usuarios') }}">Usuários</a></li>
-    <li><a href="{{ url_for('equipes') }}">Equipes</a></li>
-    <li><a href="{{ url_for('agentes') }}">Área C.R.I.S (Agentes)</a></li>
-  </ul>
-  {% else %}
-  <h2>Área C.R.I.S</h2>
-  <a href="{{ url_for('agentes') }}">Acessar Área C.R.I.S</a>
-  {% endif %}
-
-  <p><a href="{{ url_for('logout') }}">Sair</a></p>
+    <hr>
+    <a href="{{ url_for('logout') }}">Sair</a>
 </body>
 </html>
