@@ -283,6 +283,28 @@ def equipes():
     conn.close()
     return render_template('equipes.html', equipes_com_agentes=equipes_com_agentes)
 
+@app.route('/editar_equipe/<nome_equipe>', methods=['GET', 'POST'])
+def editar_equipe(nome_equipe):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Busca todos os agentes da equipe
+    cursor.execute("SELECT * FROM agentes WHERE equipe = %s", (nome_equipe,))
+    agentes = cursor.fetchall()
+
+    if request.method == 'POST':
+        novo_nome = request.form.get('novo_nome')
+        if novo_nome:
+            cursor.execute("UPDATE agentes SET equipe = %s WHERE equipe = %s", (novo_nome, nome_equipe))
+            conn.commit()
+            flash('Equipe renomeada com sucesso!')
+            conn.close()
+            return redirect(url_for('equipes'))
+
+    conn.close()
+    return render_template('editar_equipe.html', nome_equipe=nome_equipe, agentes=agentes)
+
+
 
 # ÁREA C.R.I.S — para usuários comuns
 @app.route('/area-cris')
