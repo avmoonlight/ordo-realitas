@@ -78,6 +78,7 @@ def dashboard():
 
 
 # LISTAR USUÁRIOS
+# LISTAR USUÁRIOS
 @app.route('/usuarios')
 def usuarios():
     conn = get_db_connection()
@@ -87,43 +88,34 @@ def usuarios():
     conn.close()
     return render_template('usuarios.html', usuarios=usuarios)
 
-
-
 # CRIAR USUÁRIO
-@app.route('/criar_usuario', methods=['GET', 'POST'])
+@app.route('/usuarios/criar', methods=['GET', 'POST'])
 def criar_usuario():
     if request.method == 'POST':
         username = request.form['username']
         senha = request.form['senha']
         imagem = None
-
         if 'imagem' in request.files:
             file = request.files['imagem']
             if file.filename != '':
                 caminho = os.path.join('static', 'uploads', file.filename)
                 file.save(caminho)
                 imagem = f'uploads/{file.filename}'
-
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("INSERT INTO usuarios (username, senha, imagem) VALUES (%s, %s, %s)", (username, senha, imagem))
         conn.commit()
         conn.close()
-
         return redirect(url_for('usuarios'))
-
     return render_template('criar_usuario.html')
 
-
-
 # EDITAR USUÁRIO
-@app.route('/editar_usuario/<int:id>', methods=['GET', 'POST'])
+@app.route('/usuarios/editar/<int:id>', methods=['GET', 'POST'])
 def editar_usuario(id):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM usuarios WHERE id = %s", (id,))
     usuario = cursor.fetchone()
-
     if not usuario:
         conn.close()
         return "Usuário não encontrado."
@@ -146,6 +138,7 @@ def editar_usuario(id):
         else:
             cursor.execute("UPDATE usuarios SET username=%s, imagem=%s WHERE id=%s",
                            (username, imagem, id))
+
         conn.commit()
         conn.close()
         return redirect(url_for('usuarios'))
@@ -153,10 +146,8 @@ def editar_usuario(id):
     conn.close()
     return render_template('editar_usuario.html', usuario=usuario)
 
-
-
 # DELETAR USUÁRIO
-@app.route('/deletar_usuario/<int:id>')
+@app.route('/usuarios/deletar/<int:id>', methods=['POST'])
 def deletar_usuario(id):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -164,7 +155,6 @@ def deletar_usuario(id):
     conn.commit()
     conn.close()
     return redirect(url_for('usuarios'))
-
 
 
 

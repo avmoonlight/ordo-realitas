@@ -4,54 +4,165 @@
     <meta charset="UTF-8">
     <title>Relatórios — Ordo Realitas</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/relatorios.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+
+    <!-- Botão Hamburguer -->
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <h2>Ordo Realitas</h2>
         <ul>
             <li><a href="{{ url_for('usuarios') }}"><i class="fa-solid fa-users"></i> Usuários</a></li>
             <li><a href="{{ url_for('equipes') }}"><i class="fa-solid fa-people-group"></i> Equipes</a></li>
-            <li><a href="{{ url_for('agentes') }}"><i class="fa-solid fa-brain"></i> Área Cris</a></li>
-            <li><a href="{{ url_for('relatorios') }}"><i class="fa-solid fa-file-lines"></i> Relatórios</a></li>
+            <li><a href="{{ url_for('relatorios') }}" class="active"><i class="fa-solid fa-file-lines"></i> Relatórios</a></li>
         </ul>
         <div class="logout-link">
             <a href="{{ url_for('logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
         </div>
     </div>
 
-    <!-- Main content -->
+    <!-- Conteúdo principal -->
     <div class="main-content">
-        <h1>Relatórios</h1>
-        <p>Lista de relatórios registrados no sistema:</p>
+        <h1>Gestão de Relatórios</h1>
+        <button class="btn-novo" id="abrirModal"><i class="fa-solid fa-plus"></i> Novo Relatório</button>
 
-        <table border="1" cellpadding="8" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Equipe</th>
-                    <th>Data</th>
-                    <th>Relatório</th>
-                    <th>Autoria</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for relatorio in relatorios %}
-                <tr>
-                    <td>{{ relatorio.nome }}</td>
-                    <td>{{ relatorio.equipe }}</td>
-                    <td>{{ relatorio.data }}</td>
-                    <td>{{ relatorio.texto }}</td>
-                    <td>{{ relatorio.autoria }}</td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="5">Nenhum relatório encontrado.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="itens-container">
+            {% for relatorio in relatorios %}
+            <div class="item-card" 
+                 data-id="{{ relatorio.id }}"
+                 data-nome="{{ relatorio.nome }}"
+                 data-equipe="{{ relatorio.equipe }}"
+                 data-data="{{ relatorio.data }}"
+                 data-texto="{{ relatorio.texto }}"
+                 data-autoria="{{ relatorio.autoria }}"
+            >
+                <h3>{{ relatorio.nome }}</h3>
+                <p>Equipe: {{ relatorio.equipe }}</p>
+                <p>Data: {{ relatorio.data }}</p>
+
+                <div class="acoes">
+                    <button class="editar" data-id="{{ relatorio.id }}"><i class="fa-solid fa-pen"></i></button>
+                    <button class="excluir" data-id="{{ relatorio.id }}"><i class="fa-solid fa-trash"></i></button>
+                </div>
+
+                <div class="detalhes-item">
+                    <p><strong>Texto:</strong> {{ relatorio.texto }}</p>
+                    <p><strong>Autoria:</strong> {{ relatorio.autoria }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
+
+    <!-- Modal Novo Relatório -->
+    <div id="modalNovoItem" class="modal">
+        <div class="modal-content">
+            <span class="fechar">&times;</span>
+            <h2>Novo Relatório</h2>
+            <form action="{{ url_for('adicionar_relatorio') }}" method="POST">
+                <label>Nome:</label>
+                <input type="text" name="nome" required>
+                <label>Equipe:</label>
+                <input type="text" name="equipe">
+                <label>Data:</label>
+                <input type="date" name="data" required>
+                <label>Texto:</label>
+                <textarea name="texto" rows="4" required></textarea>
+                <label>Autoria:</label>
+                <input type="text" name="autoria">
+                <button type="submit" class="btn-salvar">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Relatório -->
+    <div id="modalEditarItem" class="modal">
+        <div class="modal-content">
+            <span class="fechar">&times;</span>
+            <h2>Editar Relatório</h2>
+            <form id="formEditarItem" method="POST">
+                <label>Nome:</label>
+                <input type="text" name="nome" id="editNome" required>
+                <label>Equipe:</label>
+                <input type="text" name="equipe" id="editEquipe">
+                <label>Data:</label>
+                <input type="date" name="data" id="editData" required>
+                <label>Texto:</label>
+                <textarea name="texto" id="editTexto" rows="4" required></textarea>
+                <label>Autoria:</label>
+                <input type="text" name="autoria" id="editAutoria">
+                <button type="submit" class="btn-salvar">Atualizar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Excluir Relatório -->
+    <div id="modalExcluirItem" class="modal">
+        <div class="modal-content">
+            <span class="fechar">&times;</span>
+            <h2>Confirmar Exclusão</h2>
+            <p>Tem certeza que deseja excluir este relatório?</p>
+            <form id="formExcluirItem" method="POST">
+                <button type="submit" class="btn-salvar confirmar">Confirmar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+            hamburger.classList.toggle('active');
+        });
+
+        // Modais
+        const modals = document.querySelectorAll('.modal');
+        const fecharBtns = document.querySelectorAll('.fechar');
+        fecharBtns.forEach(btn => btn.onclick = () => btn.parentElement.parentElement.style.display = 'none');
+        window.onclick = e => { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; };
+
+        document.getElementById('abrirModal').onclick = () => document.getElementById('modalNovoItem').style.display = 'flex';
+
+        // BOTÕES EDITAR
+        const editarBtns = document.querySelectorAll('.editar');
+        editarBtns.forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                const card = e.target.closest('.item-card');
+                const id = card.dataset.id;
+                const form = document.getElementById('formEditarItem');
+                form.action = `/editar_relatorio/${id}`;
+                document.getElementById('editNome').value = card.dataset.nome;
+                document.getElementById('editEquipe').value = card.dataset.equipe;
+                document.getElementById('editData').value = card.dataset.data;
+                document.getElementById('editTexto').value = card.dataset.texto;
+                document.getElementById('editAutoria').value = card.dataset.autoria;
+                document.getElementById('modalEditarItem').style.display = 'flex';
+            });
+        });
+
+        // BOTÕES EXCLUIR
+        const excluirBtns = document.querySelectorAll('.excluir');
+        excluirBtns.forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                const card = e.target.closest('.item-card');
+                const id = card.dataset.id;
+                const form = document.getElementById('formExcluirItem');
+                form.action = `/deletar_relatorio/${id}`;
+                document.getElementById('modalExcluirItem').style.display = 'flex';
+            });
+        });
+    </script>
 </body>
 </html>
