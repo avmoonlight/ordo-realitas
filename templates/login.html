@@ -3,21 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
+
+  <!-- CSS base -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <!-- CSS da página -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+
+  <!-- Bootstrap Icons -->
+  <link 
+    rel="stylesheet" 
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+  >
 </head>
 <body>
-  <h1>Login</h1>
-  <form method="POST" action="/login">
-    <label>Usuário:</label><br>
-    <input type="text" name="username" required><br><br>
 
-    <label>Senha:</label><br>
-    <input type="password" name="senha" required><br><br>
+  <!-- Botão de alternância de tema -->
+  <button id="theme-toggle" class="theme-btn">
+    <i class="bi bi-moon-fill" id="theme-icon"></i>
+  </button>
 
-    <button type="submit">Entrar</button>
-  </form>
+  <div class="login-container">
+    <h1>Login</h1>
+    <form method="POST" action="/login">
+      <label>Usuário:</label>
+      <input type="text" name="username" required>
 
-  {% if erro %}
-    <p style="color:red;">{{ erro }}</p>
-  {% endif %}
+      <label>Senha:</label>
+      <input type="password" name="senha" required>
+
+      <button type="submit">Entrar</button>
+    </form>
+
+    {% if erro %}
+      <p class="error-msg">{{ erro }}</p>
+    {% endif %}
+  </div>
+
+  <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
 </body>
 </html>

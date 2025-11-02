@@ -1,0 +1,94 @@
+/* ========== LOGIN.CSS ========== */
+
+/* Fundo preto padrão */
+body {
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Container do formulário */
+.login-container {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 2rem 3rem;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  color: var(--text);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+}
+
+/* Título */
+.login-container h1 {
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Labels */
+.login-container label {
+  display: block;
+  text-align: left;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  color: var(--text);
+}
+
+/* Inputs */
+.login-container input {
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.3);
+  color: var(--text);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.login-container input:focus {
+  border-color: var(--accent);
+}
+
+/* Botão */
+.login-container button {
+  width: 100%;
+  padding: 0.8rem;
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.login-container button:hover {
+  background: #0b5ed7;
+  transform: scale(1.02);
+}
+
+/* Mensagem de erro */
+.error-msg {
+  color: #ff4d4d;
+  font-weight: 500;
+  margin-top: 0.8rem;
+}
+
+/* Responsividade */
+@media (max-width: 450px) {
+  .login-container {
+    padding: 1.5rem 2rem;
+  }
+}

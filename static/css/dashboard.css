@@ -1,0 +1,272 @@
+/* === RESET === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+/* === LAYOUT GERAL === */
+body {
+    display: flex;
+    min-height: 100vh;
+    background-color: #000000;
+    color: #5d316e;
+    transition: 0.3s;
+}
+
+/* === SIDEBAR === */
+.sidebar {
+    width: 250px;
+    background-color: #181a25;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 25px 20px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    transition: transform 0.3s ease;
+    box-shadow: 3px 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+.sidebar h2 {
+    text-align: center;
+    font-size: 1.4rem;
+    color: #5b2976;
+    margin-bottom: 40px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.sidebar ul {
+    list-style: none;
+    flex-grow: 1;
+}
+
+.sidebar ul li {
+    margin: 20px 0;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #cfd2e3;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.sidebar ul li a i {
+    font-size: 18px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #2c083a;
+    color: #181a25;
+}
+
+/* === LINK SAIR === */
+.logout-link {
+    margin-top: auto;
+}
+
+.logout-link a {
+    text-decoration: none;
+    color: #ff6b6b;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.logout-link a i {
+    font-size: 16px;
+}
+
+.logout-link a:hover {
+    background-color: #ff6b6b;
+    color: #fff;
+}
+
+/* === PARALLAX BACKGROUND === */
+.parallax {
+    background-image: url("../img/dashboard.gif"); /* coloque sua imagem aqui */
+    height: 500px; /* altura do efeito */
+    background-attachment: fixed; /* cria o efeito de parallax */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: brightness(0.4) saturate(1.2);
+    box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.8);
+    position: relative;
+}
+
+.parallax-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #c3a6ff;
+    padding-top: 180px;
+    text-shadow: 0 0 10px #9b59b6;
+}
+
+
+/* Adiciona um brilho roxo suave por cima */
+.parallax::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(140, 82, 255, 0.15), rgba(0, 0, 0, 0.9));
+}
+
+
+/* === BOTÃO HAMBURGUER (INVERTIDO) === */
+.hamburger {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    width: 35px;
+    height: 30px;
+    cursor: pointer;
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.hamburger span {
+    height: 4px;
+    background: #2c3e50;
+    border-radius: 2px;
+    transition: 0.3s;
+}
+
+/* 👇 Agora o botão começa como um "X" */
+.hamburger span:nth-child(1) {
+    transform: rotate(45deg) translate(7px, 7px);
+}
+.hamburger span:nth-child(2) {
+    opacity: 0;
+}
+.hamburger span:nth-child(3) {
+    transform: rotate(-45deg) translate(8px, -8px);
+}
+
+/* 👇 Quando ativo, vira o "hambúrguer" */
+.hamburger.active span {
+    transform: none;
+    opacity: 1;
+}
+
+/* === CONTEÚDO === */
+.main-content {
+    margin-left: 250px;
+    flex: 1;
+    padding: 50px 60px;
+    transition: margin-left 0.3s ease;
+}
+
+.sidebar.hidden ~ .main-content {
+    margin-left: 0;
+}
+
+.main-content h1 {
+    font-size: 1.8rem;
+    color: #9e60ba;
+    margin-bottom: 10px;
+}
+
+.main-content p {
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.main-content strong {
+    color: #955ba7;
+}
+
+/* === ESTILO DO PAINEL DE GRÁFICOS === */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.card {
+    background-color: #181a25;
+    border: 1px solid rgba(155, 89, 182, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    color: #eee;
+    box-shadow: 0 0 20px rgba(155, 89, 182, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px rgba(155, 89, 182, 0.3);
+}
+
+.card h3 {
+    color: #b388ff;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+canvas {
+    width: 100%;
+    height: 250px;
+}
+
+.dashboard-bottom {
+    display: flex;
+    gap: 25px; /* espaço entre os elementos */
+    margin-top: 40px;
+}
+
+.dashboard-bottom .card,
+.dashboard-bottom .parallax {
+    flex: 1; /* cada um ocupa metade da largura disponível */
+    min-width: 300px; /* evita que fique muito pequeno em telas menores */
+}
+
+.dashboard-bottom .parallax {
+    height: auto; /* ajusta à altura do conteúdo */
+    min-height: 300px; /* mantém um tamanho mínimo */
+    background-attachment: scroll; /* evita conflito com flexbox */
+}
+
+
+/* === RESPONSIVIDADE === */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    .sidebar.show {
+        transform: translateX(0);
+    }
+    .main-content {
+        margin-left: 0;
+        padding: 30px 20px;
+    }
+}
+

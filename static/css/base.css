@@ -1,0 +1,72 @@
+/* ========== BASE.CSS ========== */
+
+/* Reseta estilos básicos */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Corpo padrão */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* ---------- Tema claro ---------- */
+:root {
+  --bg: #f5f6fa;
+  --text: #1c1c1c;
+  --accent: #5c6bc0;
+  --card: #ffffff;
+  --sidebar-bg: #ffffff;
+  --sidebar-text: #222;
+  --border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* ---------- Tema escuro ---------- */
+[data-theme="dark"] {
+  --bg: #0d0b1a;
+  --text: #f1f1f1;
+  --accent: #6c63ff;
+  --card: rgba(255, 255, 255, 0.05);
+  --sidebar-bg: rgba(25, 20, 50, 0.95);
+  --sidebar-text: #fff;
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------- Botão de alternância ---------- */
+.theme-btn {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: var(--card);
+  color: var(--text);
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+  z-index: 999;
+}
+
+.theme-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Ícone dentro do botão */
+.theme-btn i {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
