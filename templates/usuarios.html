@@ -2,38 +2,159 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Usuários</title>
+    <title>Usuários — Ordo Realitas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/usuarios.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <h1>Lista de Usuários</h1>
-    <a href="{{ url_for('criar_usuario') }}">+ Criar Novo Usuário</a>
-    <br><br>
 
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Imagem</th>
-            <th>Username</th>
-            <th>Ações</th>
-        </tr>
-        {% for u in usuarios %}
-        <tr>
-            <td>{{ u.id }}</td>
-            <td>
+    <!-- Botão Hamburguer -->
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h2>Ordo Realitas</h2>
+         <ul>
+            <li><a href="{{ url_for('usuarios') }}"><i class="fa-solid fa-users"></i> Usuários</a></li>
+            <li><a href="{{ url_for('equipes') }}"><i class="fa-solid fa-people-group"></i> Equipes</a></li>
+            <li><a href="{{ url_for('agentes') }}"><i class="fa-solid fa-brain"></i> Área Cris</a></li>
+            <li><a href="{{ url_for('relatorios') }}"><i class="fa-solid fa-file-lines"></i> Relatórios</a></li>
+        </ul>
+
+        <div class="logout-link">
+            <a href="{{ url_for('logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="main-content">
+        <h1>Gestão de Usuários</h1>
+        <button class="btn-novo" id="abrirModal"><i class="fa-solid fa-plus"></i> Novo Usuário</button>
+
+        <div class="usuarios-container">
+            {% for u in usuarios %}
+            <div class="usuario-card" 
+                data-id="{{ u.id }}" 
+                data-username="{{ u.username }}"
+                data-img="{{ url_for('static', filename=u.imagem) if u.imagem else url_for('static', filename='img/default_user.png') }}">
+                
                 {% if u.imagem %}
-                    <img src="{{ url_for('static', filename=u.imagem) }}" width="60">
+                    <img src="{{ url_for('static', filename=u.imagem) }}" alt="{{ u.username }}">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/default_user.png') }}" alt="Sem imagem">
                 {% endif %}
-            </td>
-            <td>{{ u.username }}</td>
-            <td>
-                <a href="{{ url_for('editar_usuario', id=u.id) }}">Editar</a> |
-                <a href="{{ url_for('deletar_usuario', id=u.id) }}">Excluir</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+                <h3>{{ u.username }}</h3>
+                <p>ID: {{ u.id }}</p>
+                <div class="acoes">
+                    <button class="editar" data-id="{{ u.id }}"><i class="fa-solid fa-pen"></i></button>
+                    <button class="excluir" data-id="{{ u.id }}"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 
-    <hr>
-    <a href="{{ url_for('dashboard') }}">Voltar ao Dashboard</a>
+    <!-- Modal: Novo Usuário -->
+    <div id="modalNovoUsuario" class="modal">
+        <div class="modal-content">
+            <span class="fechar">&times;</span>
+            <h2>Novo Usuário</h2>
+            <form action="{{ url_for('criar_usuario') }}" method="POST" enctype="multipart/form-data">
+                <label>Username:</label>
+                <input type="text" name="username" required>
+
+                <label>Senha:</label>
+                <input type="password" name="senha" required>
+
+                <label>Imagem:</label>
+                <input type="file" name="imagem" accept="image/*">
+
+                <button type="submit" class="btn-salvar">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Editar Usuário -->
+    <div id="modalEditarUsuario" class="modal">
+        <div class="modal-content">
+            <span class="fechar">&times;</span>
+            <h2>Editar Usuário</h2>
+            <form id="formEditarUsuario" method="POST" enctype="multipart/form-data">
+                <label>Username:</label>
+                <input type="text" name="username" id="editUsername" required>
+
+                <label>Nova Senha:</label>
+                <input type="password" name="senha">
+
+                <label>Imagem:</label>
+                <input type="file" name="imagem" accept="image/*">
+
+                <button type="submit" class="btn-salvar">Atualizar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmar Exclusão -->
+    <div id="modalExcluirUsuario" class="modal">
+        <div class="modal-content">
+            <span class="fechar">&times;</span>
+            <h2>Confirmar Exclusão</h2>
+            <p>Tem certeza que deseja excluir este usuário?</p>
+            <form id="formExcluirUsuario" method="POST">
+                <button type="submit" class="btn-salvar" style="background:#e74c3c;">Confirmar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+            hamburger.classList.toggle('active');
+        });
+
+        // ===== MODAIS =====
+        const modals = document.querySelectorAll('.modal');
+        const fecharBtns = document.querySelectorAll('.fechar');
+        fecharBtns.forEach(btn => btn.onclick = () => btn.parentElement.parentElement.style.display = 'none');
+        window.onclick = e => { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; };
+
+        // Modal Novo
+        document.getElementById('abrirModal').onclick = () => document.getElementById('modalNovoUsuario').style.display = 'flex';
+
+        // Modal Editar
+        const editarBtns = document.querySelectorAll('.editar');
+        editarBtns.forEach(btn => {
+            btn.addEventListener('click', e => {
+                const card = e.target.closest('.usuario-card');
+                const id = card.dataset.id;
+                const username = card.dataset.username;
+                const form = document.getElementById('formEditarUsuario');
+                form.action = `/usuarios/editar/${id}`;
+                document.getElementById('editUsername').value = username;
+                document.getElementById('modalEditarUsuario').style.display = 'flex';
+            });
+        });
+
+        // Modal Excluir
+        const excluirBtns = document.querySelectorAll('.excluir');
+        excluirBtns.forEach(btn => {
+            btn.addEventListener('click', e => {
+                const card = e.target.closest('.usuario-card');
+                const id = card.dataset.id;
+                const form = document.getElementById('formExcluirUsuario');
+                form.action = `/usuarios/deletar/${id}`;
+                document.getElementById('modalExcluirUsuario').style.display = 'flex';
+            });
+        });
+    </script>
+
 </body>
 </html>

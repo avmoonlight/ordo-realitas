@@ -1,0 +1,274 @@
+/* === USUÁRIOS === */
+
+.main-content {
+    color: #fff;
+}
+
+.btn-novo {
+    background: #9b59b6;
+    color: #fff;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+    margin-bottom: 20px;
+}
+
+.btn-novo:hover {
+    background: #b388ff;
+}
+
+/* === GRID DE USUÁRIOS === */
+.usuarios-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.usuario-card {
+    background: #181a25;
+    border: 1px solid rgba(155, 89, 182, 0.3);
+    border-radius: 12px;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(155, 89, 182, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.usuario-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px rgba(155, 89, 182, 0.4);
+}
+
+.usuario-card img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #9b59b6;
+    margin-bottom: 10px;
+}
+
+.usuario-card h3 {
+    margin-bottom: 5px;
+    color: #b388ff;
+}
+
+.usuario-card p {
+    color: #aaa;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.usuario-card .acoes {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.usuario-card a {
+    text-decoration: none;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: 0.3s;
+    font-size: 0.85rem;
+}
+
+.usuario-card a.editar {
+    background: #6a1b9a;
+}
+
+.usuario-card a.editar:hover {
+    background: #8e24aa;
+}
+
+.usuario-card a.excluir {
+    background: #e74c3c;
+}
+
+.usuario-card a.excluir:hover {
+    background: #c0392b;
+}
+
+/* === MODAL === */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #1f1f2e;
+    padding: 30px;
+    border-radius: 12px;
+    width: 400px;
+    box-shadow: 0 0 20px rgba(155,89,182,0.3);
+    position: relative;
+    color: #fff;
+}
+
+.modal-content h2 {
+    color: #b388ff;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.modal-content label {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: none;
+    background: #2c2c3a;
+    color: #fff;
+}
+
+.btn-salvar {
+    margin-top: 15px;
+    background: #9b59b6;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.btn-salvar:hover {
+    background: #b388ff;
+}
+
+.fechar {
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* === MODAIS DE EDIÇÃO E EXCLUSÃO === */
+
+.modal-content p {
+    text-align: center;
+    font-size: 0.95rem;
+    color: #ccc;
+    margin: 15px 0;
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="password"],
+.modal-content input[type="file"] {
+    width: 100%;
+}
+
+.modal-content .btn-salvar[style*="e74c3c"] {
+    background: #e74c3c;
+}
+
+.modal-content .btn-salvar[style*="e74c3c"]:hover {
+    background: #c0392b;
+}
+
+/* === BOTÕES === */
+
+/* Botão principal (Novo Usuário, Salvar, Atualizar, etc.) */
+.btn-novo,
+.btn-salvar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #8e24aa, #9b59b6);
+    color: #fff;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: 0 0 10px rgba(155, 89, 182, 0.4);
+    transition: all 0.3s ease;
+}
+
+.btn-novo:hover,
+.btn-salvar:hover {
+    background: linear-gradient(135deg, #b388ff, #9b59b6);
+    box-shadow: 0 0 20px rgba(155, 89, 182, 0.6);
+    transform: translateY(-2px);
+}
+
+/* Botões menores dentro dos cards */
+.usuario-card .acoes button {
+    border: none;
+    color: #fff;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.usuario-card .acoes button.editar {
+    background: linear-gradient(135deg, #6a1b9a, #8e24aa);
+}
+
+.usuario-card .acoes button.editar:hover {
+    background: linear-gradient(135deg, #b388ff, #8e24aa);
+    transform: scale(1.1);
+}
+
+.usuario-card .acoes button.excluir {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.usuario-card .acoes button.excluir:hover {
+    background: linear-gradient(135deg, #ff6b6b, #e74c3c);
+    transform: scale(1.1);
+}
+
+/* Botão confirmar exclusão (vermelho especial) */
+.btn-salvar[style*="e74c3c"] {
+    background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+}
+
+.btn-salvar[style*="e74c3c"]:hover {
+    background: linear-gradient(135deg, #ff6b6b, #e74c3c) !important;
+    box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+}
+
+/* Ícones dentro dos botões */
+button i,
+.btn-novo i,
+.btn-salvar i {
+    font-size: 1rem;
+}
+

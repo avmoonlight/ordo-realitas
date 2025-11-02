@@ -2,35 +2,97 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Equipes</title>
+    <title>Equipes — Ordo Realitas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/equipes.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <h1>Equipes</h1>
 
-    {% for equipe in equipes_com_agentes %}
-        <h2>Equipe: {{ equipe.nome_equipe }}</h2>
-        <a href="{{ url_for('editar_equipe', nome_equipe=equipe.nome_equipe) }}">Editar Equipe</a>
-        <table border="1">
-            <tr>
-                <th>Imagem</th>
-                <th>Nome</th>
-                <th>Sobrenome</th>
-            </tr>
-            {% for membro in equipe.membros %}
-            <tr>
-                <td>
-                    {% if membro.imagem %}
-                        <img src="{{ url_for('static', filename=membro.imagem) }}" width="60">
-                    {% endif %}
-                </td>
-                <td>{{ membro.nome }}</td>
-                <td>{{ membro.sobrenome }}</td>
-            </tr>
+    <!-- Botão Hamburguer -->
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h2>Ordo Realitas</h2>
+         <ul>
+            <li><a href="{{ url_for('usuarios') }}"><i class="fa-solid fa-users"></i> Usuários</a></li>
+            <li><a href="{{ url_for('equipes') }}"><i class="fa-solid fa-people-group"></i> Equipes</a></li>
+            <li><a href="{{ url_for('agentes') }}"><i class="fa-solid fa-brain"></i> Área Cris</a></li>
+            <li><a href="{{ url_for('relatorios') }}"><i class="fa-solid fa-file-lines"></i> Relatórios</a></li>
+        </ul>
+        <div class="logout-link">
+            <a href="{{ url_for('logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="main-content">
+        <h1>Gestão de Equipes</h1>
+
+        <div class="equipes-container">
+            {% for equipe in equipes_com_agentes %}
+            <div class="equipe-card">
+                <h2 class="nome-equipe">{{ equipe.nome_equipe }}</h2>
+                <button class="btn-editar" onclick="abrirModal('{{ equipe.nome_equipe }}')">
+                    <i class="fa-solid fa-pen"></i> Editar Equipe
+                </button>
+
+                <div class="membros">
+                    {% for membro in equipe.membros %}
+                    <div class="membro-card">
+                        {% if membro.imagem %}
+                        <img src="{{ url_for('static', filename=membro.imagem) }}" alt="{{ membro.nome }}">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='img/default_user.png') }}" alt="Sem imagem">
+                        {% endif %}
+                        <p class="membro-nome">{{ membro.nome }}</p>
+                        <p class="membro-sobrenome">{{ membro.sobrenome }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Modal Edição -->
+            <div id="modal-{{ equipe.nome_equipe }}" class="modal">
+                <div class="modal-content">
+                    <span class="fechar" onclick="fecharModal('{{ equipe.nome_equipe }}')">&times;</span>
+                    <h2>Editar Equipe</h2>
+                    <form action="{{ url_for('editar_equipe', nome_equipe=equipe.nome_equipe) }}" method="POST">
+                        <label>Nome da Equipe:</label>
+                        <input type="text" name="nome_equipe" value="{{ equipe.nome_equipe }}" required>
+                        <button type="submit" class="btn-salvar">Salvar</button>
+                    </form>
+                </div>
+            </div>
             {% endfor %}
-        </table>
-        <hr>
-    {% endfor %}
+        </div>
+    </div>
 
-    <a href="{{ url_for('dashboard') }}">Voltar ao Dashboard</a>
+    <script>
+        // Sidebar
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+            hamburger.classList.toggle('active');
+        });
+
+        // Modais
+        function abrirModal(nomeEquipe) {
+            document.getElementById('modal-' + nomeEquipe).style.display = 'flex';
+        }
+        function fecharModal(nomeEquipe) {
+            document.getElementById('modal-' + nomeEquipe).style.display = 'none';
+        }
+        window.onclick = e => {
+            if (e.target.classList.contains('modal')) e.target.style.display = 'none';
+        };
+    </script>
+
 </body>
 </html>

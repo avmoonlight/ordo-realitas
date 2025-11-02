@@ -1,32 +1,179 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Itens Paranormais</title>
+    <meta charset="UTF-8">
+    <title>Itens Paranormais — Ordo Realitas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/itens.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-  <h1>Criar Item Paranormal</h1>
 
-  <form method="POST" enctype="multipart/form-data">
-    Nome: <input type="text" name="nome" required><br>
-    Elemento: <input type="text" name="elemento"><br>
-    Efeito: <input type="text" name="efeito"><br>
-    Num. Categórico: <input type="text" name="num_categorico"><br>
-    Raridade: <input type="text" name="raridade"><br>
-    Imagem: <input type="file" name="imagem"><br>
-    <button type="submit">Salvar</button>
-  </form>
+    <!-- Botão Hamburguer -->
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
 
-  <hr>
-  <h2>Itens Cadastrados</h2>
-  {% for item in itens %}
-    <p><strong>{{ item.nome }}</strong> ({{ item.raridade }})</p>
-    {% if item.imagem %}
-      <img src="{{ url_for('static', filename=item.imagem) }}" width="80"><br>
-    {% endif %}
-    <a href="{{ url_for('editar_item', id=item.id) }}">Editar</a> |
-    <a href="{{ url_for('deletar_item', id=item.id) }}">Excluir</a>
-    <hr>
-  {% endfor %}
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h2>Ordo Realitas</h2>
+        <ul>
+            <li><a href="{{ url_for('agentes') }}"><i class="fa-solid fa-brain"></i> Agentes</a></li>
+            <li><a href="{{ url_for('itens') }}" class="active"><i class="fa-solid fa-box"></i> Itens</a></li>
+            <li><a href="{{ url_for('criaturas') }}"><i class="fa-solid fa-dragon"></i> Criaturas</a></li>
+        </ul>
+        <div class="logout-link">
+            <a href="{{ url_for('logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="main-content">
+        <h1>Gestão de Itens Paranormais</h1>
+        <button class="btn-novo" id="abrirModal"><i class="fa-solid fa-plus"></i> Novo Item</button>
+
+        <div class="itens-container">
+            {% for item in itens %}
+            <div class="item-card" 
+                 data-id="{{ item.id }}"
+                 data-nome="{{ item.nome }}"
+                 data-elemento="{{ item.elemento }}"
+                 data-efeito="{{ item.efeito }}"
+                 data-num_categorico="{{ item.num_categorico }}"
+                 data-raridade="{{ item.raridade }}"
+            >
+                {% if item.imagem %}
+                    <img src="{{ url_for('static', filename=item.imagem) }}?v={{ item.id }}{{ loop.index }}" alt="{{ item.nome }}">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/default_item.png') }}" alt="Sem imagem">
+                {% endif %}
+
+                <h3>{{ item.nome }}</h3>
+                <p>Raridade: {{ item.raridade }}</p>
+
+                <div class="acoes">
+                    <button class="editar" data-id="{{ item.id }}"><i class="fa-solid fa-pen"></i></button>
+                    <button class="excluir" data-id="{{ item.id }}"><i class="fa-solid fa-trash"></i></button>
+                </div>
+
+                <div class="detalhes-item">
+                    <p><strong>Elemento:</strong> {{ item.elemento }}</p>
+                    <p><strong>Efeito:</strong> {{ item.efeito }}</p>
+                    <p><strong>Num. Categórico:</strong> {{ item.num_categorico }}</p>
+                    <p><strong>Raridade:</strong> {{ item.raridade }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Modal Novo Item -->
+    <div id="modalNovoItem" class="modal">
+        <div class="modal-content">
+            <span class="fechar">&times;</span>
+            <h2>Novo Item Paranormal</h2>
+            <form action="{{ url_for('itens') }}" method="POST" enctype="multipart/form-data">
+                <label>Nome:</label>
+                <input type="text" name="nome" required>
+                <label>Elemento:</label>
+                <input type="text" name="elemento">
+                <label>Efeito:</label>
+                <input type="text" name="efeito">
+                <label>Num. Categórico:</label>
+                <input type="text" name="num_categorico">
+                <label>Raridade:</label>
+                <input type="text" name="raridade">
+                <label>Imagem:</label>
+                <input type="file" name="imagem" accept="image/*">
+                <button type="submit" class="btn-salvar">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Item -->
+    <div id="modalEditarItem" class="modal">
+        <div class="modal-content">
+            <span class="fechar">&times;</span>
+            <h2>Editar Item Paranormal</h2>
+            <form id="formEditarItem" method="POST" enctype="multipart/form-data">
+                <label>Nome:</label>
+                <input type="text" name="nome" id="editNome" required>
+                <label>Elemento:</label>
+                <input type="text" name="elemento" id="editElemento">
+                <label>Efeito:</label>
+                <input type="text" name="efeito" id="editEfeito">
+                <label>Num. Categórico:</label>
+                <input type="text" name="num_categorico" id="editNum">
+                <label>Raridade:</label>
+                <input type="text" name="raridade" id="editRaridade">
+                <label>Imagem:</label>
+                <input type="file" name="imagem" accept="image/*">
+                <button type="submit" class="btn-salvar">Atualizar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Excluir Item -->
+    <div id="modalExcluirItem" class="modal">
+        <div class="modal-content">
+            <span class="fechar">&times;</span>
+            <h2>Confirmar Exclusão</h2>
+            <p>Tem certeza que deseja excluir este item?</p>
+            <form id="formExcluirItem" method="POST">
+                <button type="submit" class="btn-salvar confirmar">Confirmar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+            hamburger.classList.toggle('active');
+        });
+
+        // Modais
+        const modals = document.querySelectorAll('.modal');
+        const fecharBtns = document.querySelectorAll('.fechar');
+        fecharBtns.forEach(btn => btn.onclick = () => btn.parentElement.parentElement.style.display = 'none');
+        window.onclick = e => { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; };
+
+        document.getElementById('abrirModal').onclick = () => document.getElementById('modalNovoItem').style.display = 'flex';
+
+        // BOTÕES EDITAR
+        const editarBtns = document.querySelectorAll('.editar');
+        editarBtns.forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                const card = e.target.closest('.item-card');
+                const id = card.dataset.id;
+                const form = document.getElementById('formEditarItem');
+                form.action = `/editar_item/${id}`;
+                document.getElementById('editNome').value = card.dataset.nome;
+                document.getElementById('editElemento').value = card.dataset.elemento;
+                document.getElementById('editEfeito').value = card.dataset.efeito;
+                document.getElementById('editNum').value = card.dataset.num_categorico;
+                document.getElementById('editRaridade').value = card.dataset.raridade;
+                document.getElementById('modalEditarItem').style.display = 'flex';
+            });
+        });
+
+        // BOTÕES EXCLUIR
+        const excluirBtns = document.querySelectorAll('.excluir');
+        excluirBtns.forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                const card = e.target.closest('.item-card');
+                const id = card.dataset.id;
+                const form = document.getElementById('formExcluirItem');
+                form.action = `/deletar_item/${id}`;
+                document.getElementById('modalExcluirItem').style.display = 'flex';
+            });
+        });
+    </script>
 </body>
 </html>

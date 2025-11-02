@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatórios — Ordo Realitas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h2>Ordo Realitas</h2>
+        <ul>
+            <li><a href="{{ url_for('usuarios') }}"><i class="fa-solid fa-users"></i> Usuários</a></li>
+            <li><a href="{{ url_for('equipes') }}"><i class="fa-solid fa-people-group"></i> Equipes</a></li>
+            <li><a href="{{ url_for('agentes') }}"><i class="fa-solid fa-brain"></i> Área Cris</a></li>
+            <li><a href="{{ url_for('relatorios') }}"><i class="fa-solid fa-file-lines"></i> Relatórios</a></li>
+        </ul>
+        <div class="logout-link">
+            <a href="{{ url_for('logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="main-content">
+        <h1>Relatórios</h1>
+        <p>Lista de relatórios registrados no sistema:</p>
+
+        <table border="1" cellpadding="8" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Equipe</th>
+                    <th>Data</th>
+                    <th>Relatório</th>
+                    <th>Autoria</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for relatorio in relatorios %}
+                <tr>
+                    <td>{{ relatorio.nome }}</td>
+                    <td>{{ relatorio.equipe }}</td>
+                    <td>{{ relatorio.data }}</td>
+                    <td>{{ relatorio.texto }}</td>
+                    <td>{{ relatorio.autoria }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">Nenhum relatório encontrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

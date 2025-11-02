@@ -20,10 +20,12 @@
 <div class="sidebar" id="sidebar">
     <h2>Ordo Realitas</h2>
     <ul>
-        <li><a href="{{ url_for('usuarios') }}"><i class="fa-solid fa-users"></i> Usuários</a></li>
-        <li><a href="{{ url_for('equipes') }}"><i class="fa-solid fa-people-group"></i> Equipes</a></li>
-        <li><a href="{{ url_for('agentes') }}"><i class="fa-solid fa-brain"></i> Área Cris</a></li> <!-- NOVO -->
-    </ul>
+    <li><a href="{{ url_for('usuarios') }}"><i class="fa-solid fa-users"></i> Usuários</a></li>
+    <li><a href="{{ url_for('equipes') }}"><i class="fa-solid fa-people-group"></i> Equipes</a></li>
+    <li><a href="{{ url_for('agentes') }}"><i class="fa-solid fa-brain"></i> Área Cris</a></li>
+    <li><a href="{{ url_for('relatorios') }}"><i class="fa-solid fa-file-lines"></i> Relatórios</a></li>
+</ul>
+
 
     <div class="logout-link">
         <a href="{{ url_for('logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>

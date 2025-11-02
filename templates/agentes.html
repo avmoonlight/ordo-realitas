@@ -1,48 +1,303 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Agentes C.R.I.S</title>
+    <meta charset="UTF-8">
+    <title>Agentes — Ordo Realitas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/agentes.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-  <h1>Agentes</h1>
 
-  <h2>Cadastrar Novo Agente</h2>
-  <form method="POST" enctype="multipart/form-data">
-    Nome: <input type="text" name="nome" required><br>
-    Sobrenome: <input type="text" name="sobrenome" required><br>
-    Data de Nascimento: <input type="date" name="data_nasc"><br>
-    Contato Emergência: <input type="text" name="contato_emergencia"><br>
-    Elemento: <input type="text" name="elemento"><br>
-    Classe: <input type="text" name="classe"><br>
-    Observações: <input type="text" name="observacoes"><br>
-    Ocupação: <input type="text" name="ocupacao"><br>
-    Marca: <input type="text" name="marca"><br>
-    Equipe: <input type="text" name="equipe"><br>
-    Status: <select name="status">
-      <option value="VIVO">Vivo</option>
-      <option value="MORTO">Morto</option>
-    </select><br>
-    Imagem: <input type="file" name="imagem"><br><br>
-    <button type="submit">Cadastrar</button>
-  </form>
-
-  <hr>
-  <h2>Agentes Cadastrados</h2>
-  {% for agente in agentes %}
-    <div>
-      <strong>{{ agente.nome }} {{ agente.sobrenome }}</strong><br>
-      Elemento: {{ agente.elemento }}<br>
-      Equipe: {{ agente.equipe }}<br>
-      {% if agente.imagem %}
-        <img src="{{ url_for('static', filename=agente.imagem) }}" width="80"><br>
-      {% endif %}
-      <a href="{{ url_for('editar', id=agente.id) }}">Editar</a> |
-      <a href="{{ url_for('deletar', id=agente.id) }}">Excluir</a>
+    <!-- Botão Hamburguer -->
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
     </div>
-    <hr>
-  {% endfor %}
 
-  <p><a href="{{ url_for('dashboard') }}">Voltar</a></p>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h2>Ordo Realitas</h2>
+        <ul>
+            <li><a href="{{ url_for('agentes') }}" class="active"><i class="fa-solid fa-brain"></i> Agentes</a></li>
+            <li><a href="{{ url_for('itens') }}"><i class="fa-solid fa-box"></i> Itens</a></li>
+            <li><a href="{{ url_for('criaturas') }}"><i class="fa-solid fa-dragon"></i> Criaturas</a></li>
+        </ul>
+        <div class="logout-link">
+            <a href="{{ url_for('logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="main-content">
+        <h1>Gestão de Agentes C.R.I.S</h1>
+        <button class="btn-novo" id="abrirModal"><i class="fa-solid fa-plus"></i> Novo Agente</button>
+
+        <div class="usuarios-container">
+            {% for agente in agentes %}
+            <div class="usuario-card" 
+                 data-id="{{ agente.id }}"
+                 data-nome="{{ agente.nome }}"
+                 data-sobrenome="{{ agente.sobrenome }}"
+                 data-data_nasc="{{ agente.data_nasc }}"
+                 data-contato="{{ agente.contato_emergencia }}"
+                 data-elemento="{{ agente.elemento }}"
+                 data-classe="{{ agente.classe }}"
+                 data-ocupacao="{{ agente.ocupacao }}"
+                 data-marca="{{ agente.marca }}"
+                 data-equipe="{{ agente.equipe }}"
+                 data-status="{{ agente.status }}"
+                 data-observacoes="{{ agente.observacoes }}"
+            >
+                {% if agente.imagem %}
+                    <img src="{{ url_for('static', filename=agente.imagem) }}?v={{ agente.id }}{{ loop.index }}" alt="{{ agente.nome }}">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/default_user.png') }}" alt="Sem imagem">
+                {% endif %}
+
+                <h3>{{ agente.nome }} {{ agente.sobrenome }}</h3>
+                <p>Data Nasc: {{ agente.data_nasc }}</p>
+
+                <div class="acoes">
+                    <button class="editar" data-id="{{ agente.id }}"><i class="fa-solid fa-pen"></i></button>
+                    <button class="excluir" data-id="{{ agente.id }}"><i class="fa-solid fa-trash"></i></button>
+                </div>
+
+                <div class="detalhes-agente">
+                    <p><strong>Contato Emergência:</strong> {{ agente.contato_emergencia }}</p>
+                    <p><strong>Elemento:</strong> {{ agente.elemento }}</p>
+                    <p><strong>Classe:</strong> {{ agente.classe }}</p>
+                    <p><strong>Ocupação:</strong> {{ agente.ocupacao }}</p>
+                    <p><strong>Marca:</strong> {{ agente.marca }}</p>
+                    <p><strong>Equipe:</strong> {{ agente.equipe }}</p>
+                    <p><strong>Status:</strong> {{ agente.status }}</p>
+                    <p><strong>Observações:</strong> {{ agente.observacoes }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Modal Novo Agente -->
+    <div id="modalNovoUsuario" class="modal">
+        <div class="modal-content">
+            <span class="fechar">&times;</span>
+            <h2>Novo Agente</h2>
+            <form action="{{ url_for('agentes') }}" method="POST" enctype="multipart/form-data">
+                <label>Nome:</label>
+                <input type="text" name="nome" required>
+                <label>Sobrenome:</label>
+                <input type="text" name="sobrenome" required>
+                <label>Data de Nascimento:</label>
+                <input type="date" name="data_nasc">
+                <label>Contato Emergência:</label>
+                <input type="text" name="contato_emergencia">
+                <label>Elemento:</label>
+                <input type="text" name="elemento">
+                <label>Classe:</label>
+                <input type="text" name="classe">
+                <label>Ocupação:</label>
+                <input type="text" name="ocupacao">
+                <label>Marca:</label>
+                <input type="text" name="marca">
+                <label>Equipe:</label>
+                <input type="text" name="equipe">
+                <label>Status:</label>
+                <select name="status">
+                    <option value="VIVO">Vivo</option>
+                    <option value="MORTO">Morto</option>
+                </select>
+                <label>Observações:</label>
+                <input type="text" name="observacoes">
+                <label>Imagem:</label>
+                <input type="file" name="imagem" accept="image/*">
+                <button type="submit" class="btn-salvar">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar e Excluir (mesma lógica do usuário) -->
+    <div id="modalEditarUsuario" class="modal">
+        <div class="modal-content">
+            <span class="fechar">&times;</span>
+            <h2>Editar Agente</h2>
+            <form id="formEditarUsuario" method="POST" enctype="multipart/form-data">
+                <label>Nome:</label>
+                <input type="text" name="nome" id="editNome" required>
+                <label>Sobrenome:</label>
+                <input type="text" name="sobrenome" id="editSobrenome" required>
+                <label>Data Nascimento:</label>
+                <input type="date" name="data_nasc" id="editDataNasc">
+                <label>Contato Emergência:</label>
+                <input type="text" name="contato_emergencia" id="editContato">
+                <label>Elemento:</label>
+                <input type="text" name="elemento" id="editElemento">
+                <label>Classe:</label>
+                <input type="text" name="classe" id="editClasse">
+                <label>Ocupação:</label>
+                <input type="text" name="ocupacao" id="editOcupacao">
+                <label>Marca:</label>
+                <input type="text" name="marca" id="editMarca">
+                <label>Equipe:</label>
+                <input type="text" name="equipe" id="editEquipe">
+                <label>Status:</label>
+                <select name="status" id="editStatus">
+                    <option value="VIVO">Vivo</option>
+                    <option value="MORTO">Morto</option>
+                </select>
+                <label>Observações:</label>
+                <input type="text" name="observacoes" id="editObservacoes">
+                <label>Imagem:</label>
+                <input type="file" name="imagem" accept="image/*">
+                <button type="submit" class="btn-salvar">Atualizar</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalExcluirUsuario" class="modal">
+        <div class="modal-content">
+            <span class="fechar">&times;</span>
+            <h2>Confirmar Exclusão</h2>
+            <p>Tem certeza que deseja excluir este agente?</p>
+            <form id="formExcluirUsuario" method="POST">
+                <button type="submit" class="btn-salvar" style="background:#e74c3c;">Confirmar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Detalhes Agente -->
+<div id="modalDetalhesAgente" class="modal modal-detalhes">
+    <div class="modal-content">
+        <span class="fechar">&times;</span>
+        <h2 id="detalheNome"></h2>
+        <p><strong>Data Nascimento:</strong> <span id="detalheData"></span></p>
+        <p><strong>Contato Emergência:</strong> <span id="detalheContato"></span></p>
+        <p><strong>Elemento:</strong> <span id="detalheElemento"></span></p>
+        <p><strong>Classe:</strong> <span id="detalheClasse"></span></p>
+        <p><strong>Ocupação:</strong> <span id="detalheOcupacao"></span></p>
+        <p><strong>Marca:</strong> <span id="detalheMarca"></span></p>
+        <p><strong>Equipe:</strong> <span id="detalheEquipe"></span></p>
+        <p><strong>Status:</strong> <span id="detalheStatus"></span></p>
+        <p><strong>Observações:</strong> <span id="detalheObservacoes"></span></p>
+        <div class="acoes">
+            <button class="editar" id="detalheEditar"><i class="fa-solid fa-pen"></i> Editar</button>
+            <button class="excluir" id="detalheExcluir"><i class="fa-solid fa-trash"></i> Excluir</button>
+        </div>
+    </div>
+</div>
+
+
+    <script>
+// Sidebar
+const hamburger = document.getElementById('hamburger');
+const sidebar = document.getElementById('sidebar');
+hamburger.addEventListener('click', () => {
+    sidebar.classList.toggle('hidden');
+    hamburger.classList.toggle('active');
+});
+
+// Modais
+const modals = document.querySelectorAll('.modal');
+const fecharBtns = document.querySelectorAll('.fechar');
+fecharBtns.forEach(btn => btn.onclick = () => btn.parentElement.parentElement.style.display = 'none');
+window.onclick = e => { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; };
+
+document.getElementById('abrirModal').onclick = () => document.getElementById('modalNovoUsuario').style.display = 'flex';
+
+// ====================
+//  BOTÕES EDITAR
+// ====================
+const editarBtns = document.querySelectorAll('.editar');
+editarBtns.forEach(btn => {
+    btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const card = e.target.closest('.usuario-card');
+        const id = card.dataset.id;
+        const form = document.getElementById('formEditarUsuario');
+        form.action = `/editar/${id}`;  // ✅ corrigido
+        document.getElementById('editNome').value = card.dataset.nome;
+        document.getElementById('editSobrenome').value = card.dataset.sobrenome;
+        document.getElementById('editDataNasc').value = card.dataset.data_nasc;
+        document.getElementById('editContato').value = card.dataset.contato;
+        document.getElementById('editElemento').value = card.dataset.elemento;
+        document.getElementById('editClasse').value = card.dataset.classe;
+        document.getElementById('editOcupacao').value = card.dataset.ocupacao;
+        document.getElementById('editMarca').value = card.dataset.marca;
+        document.getElementById('editEquipe').value = card.dataset.equipe;
+        document.getElementById('editStatus').value = card.dataset.status;
+        document.getElementById('editObservacoes').value = card.dataset.observacoes;
+        document.getElementById('modalEditarUsuario').style.display = 'flex';
+    });
+});
+
+// ====================
+//  BOTÕES EXCLUIR
+// ====================
+const excluirBtns = document.querySelectorAll('.excluir');
+excluirBtns.forEach(btn => {
+    btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const card = e.target.closest('.usuario-card');
+        const id = card.dataset.id;
+        const form = document.getElementById('formExcluirUsuario');
+        form.action = `/deletar/${id}`;  // ✅ corrigido
+        document.getElementById('modalExcluirUsuario').style.display = 'flex';
+    });
+});
+
+// ====================
+//  DETALHES DO AGENTE
+// ====================
+const cards = document.querySelectorAll('.usuario-card');
+cards.forEach(card => {
+    card.addEventListener('click', () => {
+        document.getElementById('detalheNome').innerText = card.dataset.nome + ' ' + card.dataset.sobrenome;
+        document.getElementById('detalheData').innerText = card.dataset.data_nasc;
+        document.getElementById('detalheContato').innerText = card.dataset.contato;
+        document.getElementById('detalheElemento').innerText = card.dataset.elemento;
+        document.getElementById('detalheClasse').innerText = card.dataset.classe;
+        document.getElementById('detalheOcupacao').innerText = card.dataset.ocupacao;
+        document.getElementById('detalheMarca').innerText = card.dataset.marca;
+        document.getElementById('detalheEquipe').innerText = card.dataset.equipe;
+        document.getElementById('detalheStatus').innerText = card.dataset.status;
+        document.getElementById('detalheObservacoes').innerText = card.dataset.observacoes;
+
+        // Botão Editar dentro do modal
+        document.getElementById('detalheEditar').onclick = (e) => {
+            e.stopPropagation();
+            const form = document.getElementById('formEditarUsuario');
+            form.action = `/editar/${card.dataset.id}`;  // ✅ corrigido
+            document.getElementById('editNome').value = card.dataset.nome;
+            document.getElementById('editSobrenome').value = card.dataset.sobrenome;
+            document.getElementById('editDataNasc').value = card.dataset.data_nasc;
+            document.getElementById('editContato').value = card.dataset.contato;
+            document.getElementById('editElemento').value = card.dataset.elemento;
+            document.getElementById('editClasse').value = card.dataset.classe;
+            document.getElementById('editOcupacao').value = card.dataset.ocupacao;
+            document.getElementById('editMarca').value = card.dataset.marca;
+            document.getElementById('editEquipe').value = card.dataset.equipe;
+            document.getElementById('editStatus').value = card.dataset.status;
+            document.getElementById('editObservacoes').value = card.dataset.observacoes;
+            document.getElementById('modalEditarUsuario').style.display = 'flex';
+            document.getElementById('modalDetalhesAgente').style.display = 'none';
+        };
+
+        // Botão Excluir dentro do modal
+        document.getElementById('detalheExcluir').onclick = (e) => {
+            e.stopPropagation();
+            const form = document.getElementById('formExcluirUsuario');
+            form.action = `/deletar/${card.dataset.id}`;  // ✅ corrigido
+            document.getElementById('modalExcluirUsuario').style.display = 'flex';
+            document.getElementById('modalDetalhesAgente').style.display = 'none';
+        };
+
+        document.getElementById('modalDetalhesAgente').style.display = 'flex';
+    });
+});
+</script>
+
+
+
 </body>
 </html>

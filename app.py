@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from werkzeug.utils import secure_filename
 import os
 import pymysql
@@ -20,25 +20,23 @@ def get_db_connection():
         cursorclass=pymysql.cursors.DictCursor
     )
 
-# Função para salvar imagens em static/uploads
 def salvar_imagem(imagem):
     if imagem and imagem.filename:
         filename = secure_filename(imagem.filename)
-        caminho_relativo = os.path.join(app.config['UPLOAD_FOLDER'], filename).replace('\\', '/')
-        caminho_completo = os.path.join(app.root_path, 'static', caminho_relativo)
+        caminho_completo = os.path.join(app.root_path, 'static', 'uploads', filename)
 
         # Evita sobrescrever imagem existente
         base, ext = os.path.splitext(filename)
         contador = 1
         while os.path.exists(caminho_completo):
             filename = f"{base}_{contador}{ext}"
-            caminho_relativo = os.path.join(app.config['UPLOAD_FOLDER'], filename).replace('\\', '/')
-            caminho_completo = os.path.join(app.root_path, 'static', caminho_relativo)
+            caminho_completo = os.path.join(app.root_path, 'static', 'uploads', filename)
             contador += 1
 
         imagem.save(caminho_completo)
-        return caminho_relativo
+        return f"uploads/{filename}"  # ✅ caminho relativo correto para url_for('static', ...)
     return ''
+
 
 
 # LOGIN — acessível por "/" e "/login"
@@ -65,7 +63,7 @@ def login():
             if user['id'] == 1:
                 return redirect(url_for('dashboard'))
             else:
-                return redirect(url_for('area_cris'))
+                return redirect(url_for('agentes'))
         else:
             flash('Usuário ou senha incorretos!')
     return render_template('login.html')
@@ -206,38 +204,58 @@ def agentes():
 
     return render_template('agentes.html', agentes=agentes)
 
-@app.route('/editar/<int:id>', methods=['GET', 'POST'])
+@app.route('/editar/<int:id>', methods=['POST'])
 def editar(id):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    if request.method == 'POST':
-        nome = request.form.get('nome')
-        sobrenome = request.form.get('sobrenome')
-        elemento = request.form.get('elemento')
-        classe = request.form.get('classe')
-        status = request.form.get('status')
-        ocupacao = request.form.get('ocupacao')
-        marca = request.form.get('marca')
-        equipe = request.form.get('equipe')
-        observacoes = request.form.get('observacoes')
-
-        cursor.execute("""
-            UPDATE agentes
-            SET nome=%s, sobrenome=%s, elemento=%s, classe=%s, status=%s,
-                ocupacao=%s, marca=%s, equipe=%s, observacoes=%s
-            WHERE id=%s
-        """, (nome, sobrenome, elemento, classe, status, ocupacao, marca, equipe, observacoes, id))
-        conn.commit()
-        conn.close()
-        flash('Agente atualizado com sucesso!')
-        return redirect(url_for('agentes'))
-
-    # exibe dados do agente para edição
+    # Busca os dados atuais do agente
     cursor.execute("SELECT * FROM agentes WHERE id = %s", (id,))
     agente = cursor.fetchone()
+
+    if not agente:
+        conn.close()
+        flash('Agente não encontrado.', 'error')
+        return redirect(url_for('agentes'))
+
+    # Dados do formulário
+    nome = request.form.get('nome')
+    sobrenome = request.form.get('sobrenome')
+    data_nasc = request.form.get('data_nasc')
+    contato = request.form.get('contato_emergencia')
+    elemento = request.form.get('elemento')
+    classe = request.form.get('classe')
+    ocupacao = request.form.get('ocupacao')
+    marca = request.form.get('marca')
+    equipe = request.form.get('equipe')
+    status = request.form.get('status')
+    observacoes = request.form.get('observacoes')
+
+    # Mantém a imagem antiga por padrão
+    imagem_path = agente['imagem']
+
+    # Se enviou nova imagem
+    imagem = request.files.get('imagem')
+    if imagem and imagem.filename != '':
+        imagem_path = salvar_imagem(imagem)  # função que salva e retorna o path relativo
+
+    # Atualiza o agente
+    cursor.execute("""
+        UPDATE agentes
+        SET nome=%s, sobrenome=%s, data_nasc=%s, contato_emergencia=%s,
+            elemento=%s, classe=%s, ocupacao=%s, marca=%s, equipe=%s,
+            status=%s, observacoes=%s, imagem=%s
+        WHERE id=%s
+    """, (nome, sobrenome, data_nasc, contato, elemento, classe,
+          ocupacao, marca, equipe, status, observacoes, imagem_path, id))
+    conn.commit()
     conn.close()
-    return render_template('editar_agente.html', agente=agente)
+
+    flash('Agente atualizado com sucesso!', 'success')
+    return redirect(url_for('agentes'))
+
+
+
 
 # DELETAR AGENTE (GET -> mostra confirmação; POST -> executa exclusão)
 @app.route('/deletar/<int:id>', methods=['GET', 'POST'])
@@ -311,7 +329,7 @@ def editar_equipe(nome_equipe):
 def area_cris():
     if 'usuario_id' not in session:
         return redirect(url_for('login'))
-    return render_template('area_cris.html')
+    return render_template('agentes.html')
 
 # ===============================
 # CRUD DE CRIATURAS
@@ -348,6 +366,15 @@ def editar_criatura(id):
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    # Busca os dados atuais da criatura
+    cursor.execute("SELECT * FROM criaturas WHERE id=%s", (id,))
+    criatura = cursor.fetchone()
+
+    if not criatura:
+        conn.close()
+        flash('Criatura não encontrada.', 'error')
+        return redirect(url_for('criaturas'))
+
     if request.method == 'POST':
         nome = request.form.get('nome')
         elemento = request.form.get('elemento')
@@ -355,17 +382,24 @@ def editar_criatura(id):
         descricao = request.form.get('descricao')
         raridade = request.form.get('raridade')
 
+        # Mantém a imagem antiga por padrão (caso queira adicionar imagem futuramente)
+        imagem_path = criatura.get('imagem', None)
+
+        imagem = request.files.get('imagem')
+        if imagem and imagem.filename != '':
+            imagem_path = salvar_imagem(imagem)
+
         cursor.execute("""
-            UPDATE criaturas SET nome=%s, elemento=%s, local_encontrado=%s, descricao=%s, raridade=%s
+            UPDATE criaturas
+            SET nome=%s, elemento=%s, local_encontrado=%s, descricao=%s, raridade=%s, imagem=%s
             WHERE id=%s
-        """, (nome, elemento, local_encontrado, descricao, raridade, id))
+        """, (nome, elemento, local_encontrado, descricao, raridade, imagem_path, id))
+
         conn.commit()
         conn.close()
-        flash('Criatura atualizada com sucesso!')
+        flash('Criatura atualizada com sucesso!', 'success')
         return redirect(url_for('criaturas'))
 
-    cursor.execute("SELECT * FROM criaturas WHERE id=%s", (id,))
-    criatura = cursor.fetchone()
     conn.close()
     return render_template('editar_criatura.html', criatura=criatura)
 
@@ -423,6 +457,15 @@ def editar_item(id):
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    # Busca os dados atuais do item
+    cursor.execute("SELECT * FROM itens_paranormais WHERE id=%s", (id,))
+    item = cursor.fetchone()
+
+    if not item:
+        conn.close()
+        flash('Item não encontrado.', 'error')
+        return redirect(url_for('itens'))
+
     if request.method == 'POST':
         nome = request.form.get('nome')
         elemento = request.form.get('elemento')
@@ -430,20 +473,27 @@ def editar_item(id):
         num_categorico = request.form.get('num_categorico')
         raridade = request.form.get('raridade')
 
+        # Mantém a imagem antiga por padrão
+        imagem_path = item.get('imagem', None)
+
+        imagem = request.files.get('imagem')
+        if imagem and imagem.filename != '':
+            imagem_path = salvar_imagem(imagem)
+
         cursor.execute("""
             UPDATE itens_paranormais
-            SET nome=%s, elemento=%s, efeito=%s, num_categorico=%s, raridade=%s
+            SET nome=%s, elemento=%s, efeito=%s, num_categorico=%s, raridade=%s, imagem=%s
             WHERE id=%s
-        """, (nome, elemento, efeito, num_categorico, raridade, id))
+        """, (nome, elemento, efeito, num_categorico, raridade, imagem_path, id))
+
         conn.commit()
         conn.close()
-        flash('Item atualizado com sucesso!')
+        flash('Item atualizado com sucesso!', 'success')
         return redirect(url_for('itens'))
 
-    cursor.execute("SELECT * FROM itens_paranormais WHERE id=%s", (id,))
-    item = cursor.fetchone()
     conn.close()
     return render_template('editar_item.html', item=item)
+
 
 
 @app.route('/deletar_item/<int:id>', methods=['GET', 'POST'])
@@ -463,7 +513,109 @@ def deletar_item(id):
     flash('Item excluído com sucesso!')
     return redirect(url_for('itens'))
 
+# RELATÓRIOS
+# ===============================
+# CRUD DE RELATÓRIOS
+# ===============================
 
+# LISTAR RELATÓRIOS
+@app.route('/relatorios')
+def relatorios():
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM relatorios ORDER BY data DESC")
+    relatorios = cursor.fetchall()
+    conn.close()
+    return render_template('relatorios.html', relatorios=relatorios)
+
+
+# ADICIONAR RELATÓRIO
+@app.route('/adicionar_relatorio', methods=['GET', 'POST'])
+def adicionar_relatorio():
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        nome = request.form['nome']
+        equipe = request.form['equipe']
+        data = request.form['data']
+        texto = request.form['texto']
+        autoria = request.form['autoria']
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO relatorios (nome, equipe, data, texto, autoria)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (nome, equipe, data, texto, autoria))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('relatorios'))
+
+    return render_template('adicionar_relatorio.html')
+
+
+# EDITAR RELATÓRIO
+@app.route('/editar_relatorio/<int:id>', methods=['GET', 'POST'])
+def editar_relatorio(id):
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM relatorios WHERE id=%s", (id,))
+    relatorio = cursor.fetchone()
+
+    if not relatorio:
+        conn.close()
+        return "Relatório não encontrado."
+
+    if request.method == 'POST':
+        nome = request.form['nome']
+        equipe = request.form['equipe']
+        data = request.form['data']
+        texto = request.form['texto']
+        autoria = request.form['autoria']
+
+        cursor.execute("""
+            UPDATE relatorios
+            SET nome=%s, equipe=%s, data=%s, texto=%s, autoria=%s
+            WHERE id=%s
+        """, (nome, equipe, data, texto, autoria, id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('relatorios'))
+
+    conn.close()
+    return render_template('editar_relatorio.html', relatorio=relatorio)
+
+
+# EXCLUIR RELATÓRIO
+@app.route('/deletar_relatorio/<int:id>', methods=['GET', 'POST'])
+def deletar_relatorio(id):
+    if 'usuario_id' not in session:
+        return redirect(url_for('login'))
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM relatorios WHERE id=%s", (id,))
+    relatorio = cursor.fetchone()
+
+    if not relatorio:
+        conn.close()
+        return "Relatório não encontrado."
+
+    if request.method == 'POST':
+        cursor.execute("DELETE FROM relatorios WHERE id=%s", (id,))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('relatorios'))
+
+    conn.close()
+    return render_template('deletar_relatorio.html', relatorio=relatorio)
 
 # LOGOUT
 @app.route('/logout')

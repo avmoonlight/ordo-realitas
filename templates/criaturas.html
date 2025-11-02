@@ -1,32 +1,179 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Criaturas</title>
+    <meta charset="UTF-8">
+    <title>Criaturas — Ordo Realitas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/criaturas.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-  <h1>Criar Criatura</h1>
 
-  <form method="POST" enctype="multipart/form-data">
-    Nome: <input type="text" name="nome" required><br>
-    Elemento: <input type="text" name="elemento"><br>
-    Local Encontrado: <input type="text" name="local_encontrado"><br>
-    Descrição: <input type="text" name="descricao"><br>
-    Raridade: <input type="text" name="raridade"><br>
-    Imagem: <input type="file" name="imagem"><br>
-    <button type="submit">Salvar</button>
-  </form>
+    <!-- Botão Hamburguer -->
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
 
-  <hr>
-  <h2>Criaturas Cadastradas</h2>
-  {% for criatura in criaturas %}
-    <p><strong>{{ criatura.nome }}</strong> ({{ criatura.raridade }})</p>
-    {% if criatura.imagem %}
-      <img src="{{ url_for('static', filename=criatura.imagem) }}" width="80"><br>
-    {% endif %}
-    <a href="{{ url_for('editar_criatura', id=criatura.id) }}">Editar</a> |
-    <a href="{{ url_for('deletar_criatura', id=criatura.id) }}">Excluir</a>
-    <hr>
-  {% endfor %}
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <h2>Ordo Realitas</h2>
+        <ul>
+            <li><a href="{{ url_for('agentes') }}"><i class="fa-solid fa-brain"></i> Agentes</a></li>
+            <li><a href="{{ url_for('itens') }}"><i class="fa-solid fa-box"></i> Itens</a></li>
+            <li><a href="{{ url_for('criaturas') }}" class="active"><i class="fa-solid fa-dragon"></i> Criaturas</a></li>
+        </ul>
+        <div class="logout-link">
+            <a href="{{ url_for('logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Sair</a>
+        </div>
+    </div>
+
+    <!-- Conteúdo principal -->
+    <div class="main-content">
+        <h1>Gestão de Criaturas</h1>
+        <button class="btn-novo" id="abrirModal"><i class="fa-solid fa-plus"></i> Nova Criatura</button>
+
+        <div class="criaturas-container">
+            {% for criatura in criaturas %}
+            <div class="criatura-card"
+                 data-id="{{ criatura.id }}"
+                 data-nome="{{ criatura.nome }}"
+                 data-elemento="{{ criatura.elemento }}"
+                 data-local="{{ criatura.local_encontrado }}"
+                 data-descricao="{{ criatura.descricao }}"
+                 data-raridade="{{ criatura.raridade }}"
+            >
+                {% if criatura.imagem %}
+                    <img src="{{ url_for('static', filename=criatura.imagem) }}?v={{ criatura.id }}{{ loop.index }}" alt="{{ criatura.nome }}">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/default_creature.png') }}" alt="Sem imagem">
+                {% endif %}
+
+                <h3>{{ criatura.nome }}</h3>
+                <p>Raridade: {{ criatura.raridade }}</p>
+
+                <div class="acoes">
+                    <button class="editar" data-id="{{ criatura.id }}"><i class="fa-solid fa-pen"></i></button>
+                    <button class="excluir" data-id="{{ criatura.id }}"><i class="fa-solid fa-trash"></i></button>
+                </div>
+
+                <div class="detalhes-criatura">
+                    <p><strong>Elemento:</strong> {{ criatura.elemento }}</p>
+                    <p><strong>Local Encontrado:</strong> {{ criatura.local_encontrado }}</p>
+                    <p><strong>Descrição:</strong> {{ criatura.descricao }}</p>
+                    <p><strong>Raridade:</strong> {{ criatura.raridade }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Modal Novo Criatura -->
+    <div id="modalNovaCriatura" class="modal">
+        <div class="modal-content">
+            <span class="fechar">&times;</span>
+            <h2>Nova Criatura</h2>
+            <form action="{{ url_for('criaturas') }}" method="POST" enctype="multipart/form-data">
+                <label>Nome:</label>
+                <input type="text" name="nome" required>
+                <label>Elemento:</label>
+                <input type="text" name="elemento">
+                <label>Local Encontrado:</label>
+                <input type="text" name="local_encontrado">
+                <label>Descrição:</label>
+                <input type="text" name="descricao">
+                <label>Raridade:</label>
+                <input type="text" name="raridade">
+                <label>Imagem:</label>
+                <input type="file" name="imagem" accept="image/*">
+                <button type="submit" class="btn-salvar">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Criatura -->
+    <div id="modalEditarCriatura" class="modal">
+        <div class="modal-content">
+            <span class="fechar">&times;</span>
+            <h2>Editar Criatura</h2>
+            <form id="formEditarCriatura" method="POST" enctype="multipart/form-data">
+                <label>Nome:</label>
+                <input type="text" name="nome" id="editNome" required>
+                <label>Elemento:</label>
+                <input type="text" name="elemento" id="editElemento">
+                <label>Local Encontrado:</label>
+                <input type="text" name="local_encontrado" id="editLocal">
+                <label>Descrição:</label>
+                <input type="text" name="descricao" id="editDescricao">
+                <label>Raridade:</label>
+                <input type="text" name="raridade" id="editRaridade">
+                <label>Imagem:</label>
+                <input type="file" name="imagem" accept="image/*">
+                <button type="submit" class="btn-salvar">Atualizar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Excluir Criatura -->
+    <div id="modalExcluirCriatura" class="modal">
+        <div class="modal-content">
+            <span class="fechar">&times;</span>
+            <h2>Confirmar Exclusão</h2>
+            <p>Tem certeza que deseja excluir esta criatura?</p>
+            <form id="formExcluirCriatura" method="POST">
+                <button type="submit" class="btn-salvar confirmar">Confirmar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+            hamburger.classList.toggle('active');
+        });
+
+        // Modais
+        const modals = document.querySelectorAll('.modal');
+        const fecharBtns = document.querySelectorAll('.fechar');
+        fecharBtns.forEach(btn => btn.onclick = () => btn.parentElement.parentElement.style.display = 'none');
+        window.onclick = e => { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; };
+
+        document.getElementById('abrirModal').onclick = () => document.getElementById('modalNovaCriatura').style.display = 'flex';
+
+        // BOTÕES EDITAR
+        const editarBtns = document.querySelectorAll('.editar');
+        editarBtns.forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                const card = e.target.closest('.criatura-card');
+                const id = card.dataset.id;
+                const form = document.getElementById('formEditarCriatura');
+                form.action = `/editar_criatura/${id}`;
+                document.getElementById('editNome').value = card.dataset.nome;
+                document.getElementById('editElemento').value = card.dataset.elemento;
+                document.getElementById('editLocal').value = card.dataset.local;
+                document.getElementById('editDescricao').value = card.dataset.descricao;
+                document.getElementById('editRaridade').value = card.dataset.raridade;
+                document.getElementById('modalEditarCriatura').style.display = 'flex';
+            });
+        });
+
+        // BOTÕES EXCLUIR
+        const excluirBtns = document.querySelectorAll('.excluir');
+        excluirBtns.forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                const card = e.target.closest('.criatura-card');
+                const id = card.dataset.id;
+                const form = document.getElementById('formExcluirCriatura');
+                form.action = `/deletar_criatura/${id}`;
+                document.getElementById('modalExcluirCriatura').style.display = 'flex';
+            });
+        });
+    </script>
 </body>
 </html>
