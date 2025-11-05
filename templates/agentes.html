@@ -31,8 +31,13 @@
 
     <!-- Conteúdo principal -->
     <div class="main-content">
+        
         <h1>Gestão de Agentes C.R.I.S</h1>
         <button class="btn-novo" id="abrirModal"><i class="fa-solid fa-plus"></i> Novo Agente</button>
+        <div class="pesquisa-container">
+    <input type="text" id="barraPesquisa" placeholder="🔍 Buscar agente...">
+</div>
+
 
         <div class="usuarios-container">
             {% for agente in agentes %}
@@ -295,6 +300,24 @@ cards.forEach(card => {
         document.getElementById('modalDetalhesAgente').style.display = 'flex';
     });
 });
+// ====================
+//  FILTRO DE PESQUISA
+// ====================
+const barraPesquisa = document.getElementById('barraPesquisa');
+
+barraPesquisa.addEventListener('keyup', () => {
+    const termo = barraPesquisa.value.toLowerCase();
+    const cards = document.querySelectorAll('.usuario-card');
+
+    cards.forEach(card => {
+        const nome = card.dataset.nome.toLowerCase();
+        const sobrenome = card.dataset.sobrenome.toLowerCase();
+        const nomeCompleto = `${nome} ${sobrenome}`;
+
+        card.style.display = nomeCompleto.includes(termo) ? 'block' : 'none';
+    });
+});
+
 </script>
 
 

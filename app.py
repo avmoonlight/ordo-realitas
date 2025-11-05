@@ -34,8 +34,11 @@ def salvar_imagem(imagem):
             contador += 1
 
         imagem.save(caminho_completo)
-        return f"uploads/{filename}"  # ✅ caminho relativo correto para url_for('static', ...)
-    return ''
+        return f"uploads/{filename}"
+
+    # 🔹 Se não enviou nenhuma imagem, retorna a padrão
+    return 'img/default.jpg'
+
 
 
 
@@ -188,7 +191,7 @@ def agentes():
               imagem_path, status, ocupacao, marca, equipe))
         conn.commit()
 
-    cursor.execute("SELECT * FROM agentes")
+    cursor.execute("SELECT * FROM agentes ORDER BY nome ASC")
     agentes = cursor.fetchall()
     conn.close()
 
