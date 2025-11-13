@@ -28,6 +28,7 @@ body {
   --sidebar-bg: #ffffff;
   --sidebar-text: #222;
   --border-color: rgba(0, 0, 0, 0.1);
+  --background-color:#ffffff;
 }
 
 /* ---------- Tema escuro ---------- */
@@ -39,6 +40,7 @@ body {
   --sidebar-bg: rgba(25, 20, 50, 0.95);
   --sidebar-text: #fff;
   --border-color: rgba(255, 255, 255, 0.1);
+  --background-color: #0d0b1a;
 }
 
 /* ---------- Botão de alternância ---------- */
