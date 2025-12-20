@@ -224,3 +224,18 @@
     background: linear-gradient(135deg, #b388ff, #8e24aa);
     transform: scale(1.05);
 }
+
+#barraPesquisa {
+    width: 60%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #2a2f4f;
+    background: #f4f7ff;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+#barraPesquisa:focus {
+    border-color: #4a64ff;
+    box-shadow: 0 0 8px rgba(74, 100, 255, 0.4);
+}

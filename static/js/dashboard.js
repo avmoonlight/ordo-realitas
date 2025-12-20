@@ -1,48 +1,60 @@
-// Toggle Sidebar
-        const navToggle = document.getElementById('navToggle');
-        const sidebar = document.getElementById('sidebar');
+const hamburger = document.getElementById('hamburger');
+const sidebar = document.getElementById('sidebar');
 
-        navToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('show');
-            navToggle.classList.toggle('active');
-        });
+hamburger.addEventListener('click', () => {
+    sidebar.classList.toggle('hidden');
+    hamburger.classList.toggle('active');
+});
 
-        // Dark Mode Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-        });
+/* GRÁFICOS */
+const purple = '#9b59b6';
 
-        // Exemplo Chart.js
-        const ctx1 = document.getElementById('chart1').getContext('2d');
-        const chart1 = new Chart(ctx1, {
-            type: 'bar',
-            data: {
-                labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril'],
-                datasets: [{
-                    label: 'Usuários',
-                    data: [12, 19, 3, 5],
-                    backgroundColor: '#ffd700'
-                }]
-            },
-            options: {
-                responsive: true
-            }
-        });
+new Chart(monstrosChart, {
+    type: 'bar',
+    data: {
+        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'],
+        datasets: [{
+            data: [5, 9, 7, 12, 8],
+            backgroundColor: 'rgba(155,89,182,0.4)'
+        }]
+    },
+    options: { plugins: { legend: { display: false } } }
+});
 
-        const ctx2 = document.getElementById('chart2').getContext('2d');
-        const chart2 = new Chart(ctx2, {
-            type: 'line',
-            data: {
-                labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril'],
-                datasets: [{
-                    label: 'Equipes Ativas',
-                    data: [7, 11, 5, 8],
-                    borderColor: '#00bfff',
-                    tension: 0.3
-                }]
-            },
-            options: {
-                responsive: true
-            }
-        });
+new Chart(mortesChart, {
+    type: 'line',
+    data: {
+        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'],
+        datasets: [{
+            data: [2, 3, 1, 4, 2],
+            borderColor: purple,
+            tension: 0.3,
+            fill: true,
+            backgroundColor: 'rgba(155,89,182,0.2)'
+        }]
+    },
+    options: { plugins: { legend: { display: false } } }
+});
+
+new Chart(atividadeChart, {
+    type: 'doughnut',
+    data: {
+        labels: ['Baixa', 'Média', 'Alta'],
+        datasets: [{
+            data: [25, 40, 35],
+            backgroundColor: ['#6a1b9a', '#8e24aa', '#b388ff']
+        }]
+    }
+});
+
+new Chart(missoesChart, {
+    type: 'radar',
+    data: {
+        labels: ['Campo', 'Urbano', 'Floresta', 'Costeiro', 'Subterrâneo'],
+        datasets: [{
+            data: [8, 6, 7, 4, 5],
+            borderColor: purple,
+            backgroundColor: 'rgba(155,89,182,0.3)'
+        }]
+    }
+});
