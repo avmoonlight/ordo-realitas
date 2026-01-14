@@ -111,7 +111,16 @@
                 <label>Descrição:</label>
                 <input type="text" name="descricao">
                 <label>Raridade:</label>
-                <input type="text" name="raridade">
+                <div class="peixe-aquario">
+                    <select name="raridade" class="peixe-select">
+                        <option value="COMUM">Comum</option>
+                        <option value="RARO">Raro</option>
+                        <option value="MUITO RARO">Muito Raro</option>
+                        <option value="RELÍQUIA">Relíquia</option>
+                    </select>
+                </div>
+
+
                 <label>Imagem:</label>
                 <input type="file" name="imagem" accept="image/*">
                 <button type="submit" class="btn-salvar">Salvar</button>
@@ -134,14 +143,25 @@
                 <label>Descrição:</label>
                 <input type="text" name="descricao" id="editDescricao">
                 <label>Raridade:</label>
-                <input type="text" name="raridade" id="editRaridade">
+                <div class="peixe-aquario">
+                    <select id="editRaridade" name="raridade" class="peixe-select">
+                        <option value="COMUM">Comum</option>
+                        <option value="RARO">Raro</option>
+                        <option value="MUITO RARO">Muito Raro</option>
+                        <option value="RELÍQUIA">Relíquia</option>
+                    </select>
+                </div>
                 <label>Imagem:</label>
-                <input type="file" name="imagem" accept="image/*">
-                <button type="submit" class="btn-salvar">Atualizar</button>
-            </form>
-        </div>
-    </div>
+                                <input type="file" name="imagem" accept="image/*">
+                                <button type="submit" class="btn-salvar">Atualizar</button>
+                            </form>
+                        </div>
+                    </div>
 
+            </div>
+
+
+                
     <!-- Modal Excluir Criatura -->
     <div id="modalExcluirCriatura" class="modal">
         <div class="modal-content">
