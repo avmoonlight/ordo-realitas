@@ -109,8 +109,12 @@
                 <input type="text" name="efeito">
                 <label>Num. Categórico:</label>
                 <input type="text" name="num_categorico">
-                <label>Raridade:</label>
-                <input type="text" name="raridade">
+                <select name="raridade" class="peixe-select">
+                        <option value="COMUM">Comum</option>
+                        <option value="RARO">Raro</option>
+                        <option value="MUITO RARO">Muito Raro</option>
+                        <option value="RELÍQUIA">Relíquia</option>
+                    </select>
                 <label>Imagem:</label>
                 <input type="file" name="imagem" accept="image/*">
                 <button type="submit" class="btn-salvar">Salvar</button>
@@ -133,7 +137,14 @@
                 <label>Num. Categórico:</label>
                 <input type="text" name="num_categorico" id="editNum">
                 <label>Raridade:</label>
-                <input type="text" name="raridade" id="editRaridade">
+                <div class="peixe-aquario">
+                    <select id="editRaridade" name="raridade" class="peixe-select">
+                        <option value="COMUM">Comum</option>
+                        <option value="RARO">Raro</option>
+                        <option value="MUITO RARO">Muito Raro</option>
+                        <option value="RELÍQUIA">Relíquia</option>
+                    </select>
+                </div>
                 <label>Imagem:</label>
                 <input type="file" name="imagem" accept="image/*">
                 <button type="submit" class="btn-salvar">Atualizar</button>
