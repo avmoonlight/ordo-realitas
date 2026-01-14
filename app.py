@@ -348,7 +348,7 @@ def criaturas():
         """, (nome, elemento, local_encontrado, descricao, raridade, imagem_path))
         conn.commit()
 
-    cursor.execute("SELECT * FROM criaturas")
+    cursor.execute("SELECT * FROM criaturas ORDER BY nome asc")
     criaturas = cursor.fetchall()
     conn.close()
     return render_template('criaturas.html', criaturas=criaturas)
