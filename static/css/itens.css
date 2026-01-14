@@ -239,3 +239,43 @@
     border-color: #4a64ff;
     box-shadow: 0 0 8px rgba(74, 100, 255, 0.4);
 }
+
+
+.peixe-select {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #555;
+    background: #2c2c2c;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    transition: all 0.25s ease;
+}
+
+.peixe-select:focus {
+    border-color: #b388ff;
+    box-shadow: 0 0 6px rgba(179, 136, 255, 0.8);
+    outline: none;
+}
+
+.peixe-aquario {
+    position: relative;
+}
+
+.peixe-aquario::after {
+    content: "▾";
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #b388ff;
+    font-size: 1.1rem;
+}
+
