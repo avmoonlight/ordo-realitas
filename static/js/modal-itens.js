@@ -37,6 +37,49 @@
             });
         });
 
+// ====================
+//  DETALHES DO ITEM
+// ====================
+document.querySelectorAll('.item-card').forEach(card => {
+    card.addEventListener('click', () => {
+
+        document.getElementById('detalheNome').innerText = card.dataset.nome;
+        document.getElementById('detalheElemento').innerText = card.dataset.elemento;
+        document.getElementById('detalheEfeito').innerText = card.dataset.efeito;
+        document.getElementById('detalheNum').innerText = card.dataset.num_categorico;
+        document.getElementById('detalheRaridade').innerText = card.dataset.raridade;
+
+        // EDITAR
+        document.getElementById('detalheEditar').onclick = e => {
+            e.stopPropagation();
+            const form = document.getElementById('formEditarItem');
+            form.action = `/editar_item/${card.dataset.id}`;
+
+            document.getElementById('editNome').value = card.dataset.nome;
+            document.getElementById('editElemento').value = card.dataset.elemento;
+            document.getElementById('editEfeito').value = card.dataset.efeito;
+            document.getElementById('editNum').value = card.dataset.num_categorico;
+
+            document.getElementById('modalEditarItem').style.display = 'flex';
+            document.getElementById('modalDetalhesItem').style.display = 'none';
+        };
+
+        // EXCLUIR
+        document.getElementById('detalheExcluir').onclick = e => {
+            e.stopPropagation();
+            const form = document.getElementById('formExcluirItem');
+            form.action = `/deletar_item/${card.dataset.id}`;
+
+            document.getElementById('modalExcluirItem').style.display = 'flex';
+            document.getElementById('modalDetalhesItem').style.display = 'none';
+        };
+
+        document.getElementById('modalDetalhesItem').style.display = 'flex';
+    });
+});
+
+
+
         // ====================
 //  FILTRO DE PESQUISA
 // ====================

@@ -37,6 +37,48 @@
             });
         });
 
+// ====================
+//  DETALHES DA CRIATURA
+// ====================
+document.querySelectorAll('.criatura-card').forEach(card => {
+    card.addEventListener('click', () => {
+
+        document.getElementById('detalheNome').innerText = card.dataset.nome;
+        document.getElementById('detalheElemento').innerText = card.dataset.elemento;
+        document.getElementById('detalheLocal').innerText = card.dataset.local;
+        document.getElementById('detalheDescricao').innerText = card.dataset.descricao;
+        document.getElementById('detalheRaridade').innerText = card.dataset.raridade;
+
+        // EDITAR
+        document.getElementById('detalheEditar').onclick = e => {
+            e.stopPropagation();
+            const form = document.getElementById('formEditarCriatura');
+            form.action = `/editar_criatura/${card.dataset.id}`;
+
+            document.getElementById('editNome').value = card.dataset.nome;
+            document.getElementById('editElemento').value = card.dataset.elemento;
+            document.getElementById('editLocal').value = card.dataset.local;
+            document.getElementById('editDescricao').value = card.dataset.descricao;
+            document.getElementById('editRaridade').value = card.dataset.raridade;
+
+            document.getElementById('modalEditarCriatura').style.display = 'flex';
+            document.getElementById('modalDetalhesCriatura').style.display = 'none';
+        };
+
+        // EXCLUIR
+        document.getElementById('detalheExcluir').onclick = e => {
+            e.stopPropagation();
+            const form = document.getElementById('formExcluirCriatura');
+            form.action = `/deletar_criatura/${card.dataset.id}`;
+
+            document.getElementById('modalExcluirCriatura').style.display = 'flex';
+            document.getElementById('modalDetalhesCriatura').style.display = 'none';
+        };
+
+        document.getElementById('modalDetalhesCriatura').style.display = 'flex';
+    });
+});
+
         // ====================
 //  FILTRO DE PESQUISA
 // ====================
