@@ -1,0 +1,121 @@
+/* ===== BASE ===== */
+body {
+    background: linear-gradient(180deg, #0b0617, #120a24);
+    color: #e6e1ff;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ===== TITULOS ===== */
+.page-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #b88cff;
+}
+
+.page-title span {
+    color: #e6d8ff;
+}
+
+.section-title {
+    font-weight: 600;
+    margin-bottom: 1.2rem;
+    color: #cdb8ff;
+}
+
+/* ===== ALERT ===== */
+.custom-alert {
+    background: rgba(160, 120, 255, 0.15);
+    border: 1px solid rgba(160, 120, 255, 0.4);
+    color: #e6d8ff;
+    border-radius: 12px;
+}
+
+/* ===== CARDS ===== */
+.custom-card {
+    background: rgba(38, 28, 64, 0.9);
+    border: 1px solid rgba(160, 120, 255, 0.15);
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(140, 90, 255, 0.15);
+}
+
+/* ===== INPUTS ===== */
+.custom-input {
+    background-color: #1a102e;
+    border: 1px solid rgba(160, 120, 255, 0.25);
+    color: #fff;
+    border-radius: 12px;
+}
+
+.custom-input:focus {
+    background-color: #1a102e;
+    border-color: #a678ff;
+    box-shadow: 0 0 0 0.2rem rgba(166, 120, 255, 0.25);
+    color: #fff;
+}
+
+/* ===== AGENT CARD ===== */
+.agent-card {
+    background: linear-gradient(160deg, #201237, #2a1850);
+    border-radius: 18px;
+    padding: 16px;
+    height: 100%;
+    box-shadow: 0 0 20px rgba(150, 100, 255, 0.15);
+    transition: transform 0.25s ease;
+}
+
+.agent-card:hover {
+    transform: translateY(-6px);
+}
+
+.agent-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-bottom: 12px;
+}
+
+.agent-info h5 {
+    color: #e6d8ff;
+    font-weight: 600;
+}
+
+.agent-info p {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    color: #cbbaff;
+}
+
+/* ===== BOTÕES ===== */
+.btn-primary {
+    background: linear-gradient(135deg, #7c4dff, #a678ff);
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    filter: brightness(1.1);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #4caf50, #6fe47a);
+    border: none;
+    border-radius: 12px;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ff4d6d, #ff6b81);
+    border: none;
+    border-radius: 10px;
+}
+
+.btn-outline-light {
+    border-radius: 14px;
+    border-color: rgba(200, 180, 255, 0.4);
+    color: #e6d8ff;
+}
+
+.btn-outline-light:hover {
+    background-color: rgba(200, 180, 255, 0.15);
+}

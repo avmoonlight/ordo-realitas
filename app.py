@@ -299,21 +299,68 @@ def editar_equipe(nome_equipe):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # Busca todos os agentes da equipe
+    # Renomear equipe
+    if request.method == 'POST' and 'novo_nome' in request.form:
+        novo_nome = request.form.get('novo_nome')
+        cursor.execute(
+            "UPDATE agentes SET equipe = %s WHERE equipe = %s",
+            (novo_nome, nome_equipe)
+        )
+        conn.commit()
+        conn.close()
+        flash('Equipe renomeada com sucesso!')
+        return redirect(url_for('equipes'))
+
+    # Agentes da equipe
     cursor.execute("SELECT * FROM agentes WHERE equipe = %s", (nome_equipe,))
     agentes = cursor.fetchall()
 
-    if request.method == 'POST':
-        novo_nome = request.form.get('novo_nome')
-        if novo_nome:
-            cursor.execute("UPDATE agentes SET equipe = %s WHERE equipe = %s", (novo_nome, nome_equipe))
-            conn.commit()
-            flash('Equipe renomeada com sucesso!')
-            conn.close()
-            return redirect(url_for('equipes'))
+    # Agentes disponíveis (sem equipe)
+    cursor.execute("SELECT * FROM agentes WHERE equipe IS NULL OR equipe = ''")
+    agentes_disponiveis = cursor.fetchall()
 
     conn.close()
-    return render_template('editar_equipe.html', nome_equipe=nome_equipe, agentes=agentes)
+
+    return render_template(
+        'editar_equipe.html',
+        nome_equipe=nome_equipe,
+        agentes=agentes,
+        agentes_disponiveis=agentes_disponiveis
+    )
+
+
+
+@app.route('/equipe/<nome_equipe>/adicionar', methods=['POST'])
+def adicionar_agente_equipe(nome_equipe):
+    agente_id = request.form.get('agente_id')
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE agentes SET equipe = %s WHERE id = %s",
+        (nome_equipe, agente_id)
+    )
+    conn.commit()
+    conn.close()
+
+    flash('Agente adicionado à equipe!')
+    return redirect(url_for('editar_equipe', nome_equipe=nome_equipe))
+
+
+@app.route('/equipe/<nome_equipe>/remover/<int:agente_id>', methods=['POST'])
+def remover_agente_equipe(nome_equipe, agente_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE agentes SET equipe = NULL WHERE id = %s",
+        (agente_id,)
+    )
+    conn.commit()
+    conn.close()
+
+    flash('Agente removido da equipe!')
+    return redirect(url_for('editar_equipe', nome_equipe=nome_equipe))
+
 
 
 

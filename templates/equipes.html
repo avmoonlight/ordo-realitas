@@ -74,9 +74,11 @@
             {% for equipe in equipes_com_agentes %}
             <div class="equipe-card">
                 <h2 class="nome-equipe">{{ equipe.nome_equipe }}</h2>
-                <button class="btn-editar" onclick="abrirModal('{{ equipe.nome_equipe }}')">
+                <a href="{{ url_for('editar_equipe', nome_equipe=equipe.nome_equipe) }}"
+                class="btn-editar">
                     <i class="fa-solid fa-pen"></i> Editar Equipe
-                </button>
+                </a>
+
 
                 <div class="membros">
                     {% for membro in equipe.membros %}
