@@ -72,13 +72,14 @@
         <div class="itens-container">
             {% for relatorio in relatorios %}
             <div class="item-card" 
-                 data-id="{{ relatorio.id }}"
-                 data-nome="{{ relatorio.nome }}"
-                 data-equipe="{{ relatorio.equipe }}"
-                 data-data="{{ relatorio.data }}"
-                 data-texto="{{ relatorio.texto }}"
-                 data-autoria="{{ relatorio.autoria }}"
-            >
+     data-id="{{ relatorio.id }}"
+     data-nome="{{ relatorio.nome }}"
+     data-equipe="{{ relatorio.equipe }}"
+     data-data="{{ relatorio.data }}"
+     data-texto="{{ relatorio.texto }}"
+     data-autoria="{{ relatorio.autoria }}"
+>
+
                 <h3>{{ relatorio.nome }}</h3>
                 <p>Equipe: {{ relatorio.equipe }}</p>
                 <p>Data: {{ relatorio.data }}</p>
@@ -89,9 +90,13 @@
                 </div>
 
                 <div class="detalhes-item">
-                    <p><strong>Texto:</strong> {{ relatorio.texto }}</p>
-                    <p><strong>Autoria:</strong> {{ relatorio.autoria }}</p>
+                <div class="detalhes-conteudo">
+                    <h4>Relatório Completo</h4>
+                    <p class="texto-relatorio">{{ relatorio.texto }}</p>
+                    <p class="autoria"><strong>Autoria:</strong> {{ relatorio.autoria }}</p>
                 </div>
+            </div>
+
             </div>
             {% endfor %}
         </div>

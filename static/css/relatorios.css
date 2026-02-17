@@ -216,3 +216,27 @@
     background: linear-gradient(135deg, #b388ff, #8e24aa);
     transform: scale(1.05);
 }
+
+/* DETALHES DO RELATÓRIO */
+.detalhes-item {
+    display: none;
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+}
+
+.detalhes-item.ativo {
+    display: block;
+}
+
+.texto-relatorio {
+    white-space: pre-line;
+    margin-bottom: 10px;
+}
+
+.detalhes-conteudo {
+    background: rgba(255,255,255,0.04);
+    padding: 15px;
+    border-radius: 8px;
+}
