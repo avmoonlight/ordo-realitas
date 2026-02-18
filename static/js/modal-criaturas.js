@@ -78,21 +78,24 @@ document.querySelectorAll('.criatura-card').forEach(card => {
         document.getElementById('modalDetalhesCriatura').style.display = 'flex';
     });
 });
-
-        // ====================
+// ====================
 //  FILTRO DE PESQUISA
 // ====================
 const barraPesquisa = document.getElementById('barraPesquisa');
 
 barraPesquisa.addEventListener('keyup', () => {
     const termo = barraPesquisa.value.toLowerCase();
-    const cards = document.querySelectorAll('.usuario-card');
+    const cards = document.querySelectorAll('.criatura-card');
 
     cards.forEach(card => {
-        const nome = card.dataset.nome.toLowerCase();
-        const sobrenome = card.dataset.sobrenome.toLowerCase();
-        const nomeCompleto = `${nome} ${sobrenome}`;
+        const nome = card.dataset.nome?.toLowerCase() || "";
+        const elemento = card.dataset.elemento?.toLowerCase() || "";
+        const local = card.dataset.local?.toLowerCase() || "";
+        const descricao = card.dataset.descricao?.toLowerCase() || "";
+        const raridade = card.dataset.raridade?.toLowerCase() || "";
 
-        card.style.display = nomeCompleto.includes(termo) ? 'block' : 'none';
+        const textoCompleto = `${nome} ${elemento} ${local} ${descricao} ${raridade}`;
+
+        card.style.display = textoCompleto.includes(termo) ? 'block' : 'none';
     });
 });

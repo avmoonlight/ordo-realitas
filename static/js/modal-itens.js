@@ -80,20 +80,24 @@ document.querySelectorAll('.item-card').forEach(card => {
 
 
 
-        // ====================
+// ====================
 //  FILTRO DE PESQUISA
 // ====================
 const barraPesquisa = document.getElementById('barraPesquisa');
 
 barraPesquisa.addEventListener('keyup', () => {
     const termo = barraPesquisa.value.toLowerCase();
-    const cards = document.querySelectorAll('.usuario-card');
+    const cards = document.querySelectorAll('.item-card');
 
     cards.forEach(card => {
-        const nome = card.dataset.nome.toLowerCase();
-        const sobrenome = card.dataset.sobrenome.toLowerCase();
-        const nomeCompleto = `${nome} ${sobrenome}`;
+        const nome = card.dataset.nome?.toLowerCase() || "";
+        const elemento = card.dataset.elemento?.toLowerCase() || "";
+        const efeito = card.dataset.efeito?.toLowerCase() || "";
+        const raridade = card.dataset.raridade?.toLowerCase() || "";
+        const numero = card.dataset.num_categorico?.toLowerCase() || "";
 
-        card.style.display = nomeCompleto.includes(termo) ? 'block' : 'none';
+        const textoCompleto = `${nome} ${elemento} ${efeito} ${raridade} ${numero}`;
+
+        card.style.display = textoCompleto.includes(termo) ? 'block' : 'none';
     });
 });
