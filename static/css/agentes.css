@@ -306,27 +306,6 @@
     transform: scale(1.05);
 }
 
-.pesquisa-container {
-    width: 100%;
-    margin: 15px 0;
-    text-align: center;
-}
-
-#barraPesquisa {
-    width: 60%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 2px solid #2a2f4f;
-    background: #f4f7ff;
-    font-size: 16px;
-    transition: 0.3s;
-}
-
-#barraPesquisa:focus {
-    border-color: #4a64ff;
-    box-shadow: 0 0 8px rgba(74, 100, 255, 0.4);
-}
-
 .peixe-select {
     width: 100%;
     padding: 10px 14px;
@@ -365,3 +344,62 @@
     font-size: 1.1rem;
 }
 
+/* ============================= */
+/* BLOCO DE PESQUISA             */
+/* ============================= */
+
+/* ============================= */
+/* PESQUISA */
+/* ============================= */
+
+.pesquisa-topo {
+    width: 100%;
+    margin: 25px 0;
+}
+
+.pesquisa-topo label {
+    display: block;
+    margin-bottom: 10px;
+    color: #c084fc;
+    font-weight: 500;
+}
+
+/* linha completa */
+.pesquisa-linha {
+    display: flex;
+    width: 100%;
+    gap: 15px;
+}
+
+/* select menor */
+#tipoFiltro {
+    width: 170px;
+    height: 55px;
+    border-radius: 14px;
+    background: #1a1a2e;
+    border: 1px solid rgba(179,136,255,0.3);
+    color: #fff;
+    padding: 0 15px;
+}
+
+/* input ocupa TODO resto */
+#barraPesquisa {
+    flex: 1;
+    height: 55px;
+    border-radius: 18px;
+    background: #141423;
+    border: 1px solid rgba(179,136,255,0.3);
+    color: #fff;
+    padding: 0 20px;
+    font-size: 1rem;
+    width: 100%;
+}
+
+#barraPesquisa:focus {
+    border-color: #b388ff;
+    box-shadow: 0 0 15px rgba(179,136,255,0.4);
+}
+
+/* ============================= */
+/* FILTROS LADO A LADO */
+/* ============================= */

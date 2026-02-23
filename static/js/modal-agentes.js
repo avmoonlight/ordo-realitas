@@ -97,19 +97,35 @@ cards.forEach(card => {
     });
 });
 // ====================
-//  FILTRO DE PESQUISA
 // ====================
+// FILTRO SIMPLES
+// ====================
+
+const tipoFiltro = document.getElementById('tipoFiltro');
 const barraPesquisa = document.getElementById('barraPesquisa');
 
-barraPesquisa.addEventListener('keyup', () => {
+function aplicarFiltros() {
+
+    const campoSelecionado = tipoFiltro.value;
     const termo = barraPesquisa.value.toLowerCase();
+
     const cards = document.querySelectorAll('.usuario-card');
 
     cards.forEach(card => {
-        const nome = card.dataset.nome.toLowerCase();
-        const sobrenome = card.dataset.sobrenome.toLowerCase();
-        const nomeCompleto = `${nome} ${sobrenome}`;
 
-        card.style.display = nomeCompleto.includes(termo) ? 'block' : 'none';
+        let valorCampo = (card.dataset[campoSelecionado] || "").toLowerCase();
+
+        let correspondePesquisa = valorCampo.includes(termo);
+
+        if (correspondePesquisa) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+
     });
-});
+}
+
+// Eventos
+barraPesquisa.addEventListener("keyup", aplicarFiltros);
+tipoFiltro.addEventListener("change", aplicarFiltros);

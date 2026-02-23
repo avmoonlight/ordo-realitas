@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Agentes — Ordo Realitas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/agentes.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
@@ -58,8 +58,27 @@
         
         <h1>Gestão de Agentes C.R.I.S</h1>
         <button class="btn-novo" id="abrirModal"><i class="fa-solid fa-plus"></i> Novo Agente</button>
-        <div class="pesquisa-container">
-    <input type="text" id="barraPesquisa" placeholder="🔍 Buscar agente...">
+        <!-- BARRA DE PESQUISA (EM CIMA) -->
+<!-- PESQUISA -->
+<div class="pesquisa-topo">
+
+    <label>Pesquisar por:</label>
+
+    <div class="pesquisa-linha">
+        <select id="tipoFiltro">
+            <option value="nome">Nome</option>
+            <option value="sobrenome">Sobrenome</option>
+            <option value="elemento">Elemento</option>
+            <option value="classe">Classe</option>
+            <option value="ocupacao">Ocupação</option>
+            <option value="marca">Marca</option>
+            <option value="equipe">Equipe</option>
+            <option value="status">Status</option>
+        </select>
+
+        <input type="text" id="barraPesquisa" placeholder="Buscar...">
+    </div>
+
 </div>
 
 
