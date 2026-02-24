@@ -79,23 +79,34 @@ document.querySelectorAll('.criatura-card').forEach(card => {
     });
 });
 // ====================
-//  FILTRO DE PESQUISA
+// FILTRO DE CRIATURAS
 // ====================
+
+const tipoFiltro = document.getElementById('tipoFiltro');
 const barraPesquisa = document.getElementById('barraPesquisa');
 
-barraPesquisa.addEventListener('keyup', () => {
+function aplicarFiltros() {
+
+    const campoSelecionado = tipoFiltro.value;
     const termo = barraPesquisa.value.toLowerCase();
+
     const cards = document.querySelectorAll('.criatura-card');
 
     cards.forEach(card => {
-        const nome = card.dataset.nome?.toLowerCase() || "";
-        const elemento = card.dataset.elemento?.toLowerCase() || "";
-        const local = card.dataset.local?.toLowerCase() || "";
-        const descricao = card.dataset.descricao?.toLowerCase() || "";
-        const raridade = card.dataset.raridade?.toLowerCase() || "";
 
-        const textoCompleto = `${nome} ${elemento} ${local} ${descricao} ${raridade}`;
+        let valorCampo = (card.dataset[campoSelecionado] || "").toLowerCase();
 
-        card.style.display = textoCompleto.includes(termo) ? 'block' : 'none';
+        let correspondePesquisa = valorCampo.includes(termo);
+
+        if (correspondePesquisa) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+
     });
-});
+}
+
+// Eventos
+barraPesquisa.addEventListener("keyup", aplicarFiltros);
+tipoFiltro.addEventListener("change", aplicarFiltros);

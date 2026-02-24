@@ -57,8 +57,23 @@
     <div class="main-content">
         <h1>Gestão de Itens</h1>
         <button class="btn-novo" id="abrirModal"><i class="fa-solid fa-plus"></i> Novo Item</button>
-        <div class="pesquisa-container">
-        <input type="text" id="barraPesquisa" placeholder="🔍 Buscar item...">
+<div class="pesquisa-topo">
+
+    <label>Pesquisar por:</label>
+
+    <div class="pesquisa-linha">
+        <select id="tipoFiltro">
+            <option value="nome">Nome</option>
+            <option value="elemento">Elemento</option>
+            <option value="efeito">Efeito</option>
+            <option value="num_categorico">Nº Categórico</option>
+            <option value="raridade">Raridade</option>
+        </select>
+
+        <input type="text" id="barraPesquisa" placeholder="Buscar item...">
+    </div>
+
+</div>
 
         <div class="itens-container">
             {% for item in itens %}

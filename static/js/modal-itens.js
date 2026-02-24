@@ -79,25 +79,35 @@ document.querySelectorAll('.item-card').forEach(card => {
 });
 
 
+// ====================
+// FILTRO DE ITENS
+// ====================
 
-// ====================
-//  FILTRO DE PESQUISA
-// ====================
+const tipoFiltro = document.getElementById('tipoFiltro');
 const barraPesquisa = document.getElementById('barraPesquisa');
 
-barraPesquisa.addEventListener('keyup', () => {
+function aplicarFiltros() {
+
+    const campoSelecionado = tipoFiltro.value;
     const termo = barraPesquisa.value.toLowerCase();
+
     const cards = document.querySelectorAll('.item-card');
 
     cards.forEach(card => {
-        const nome = card.dataset.nome?.toLowerCase() || "";
-        const elemento = card.dataset.elemento?.toLowerCase() || "";
-        const efeito = card.dataset.efeito?.toLowerCase() || "";
-        const raridade = card.dataset.raridade?.toLowerCase() || "";
-        const numero = card.dataset.num_categorico?.toLowerCase() || "";
 
-        const textoCompleto = `${nome} ${elemento} ${efeito} ${raridade} ${numero}`;
+        let valorCampo = (card.dataset[campoSelecionado] || "").toLowerCase();
 
-        card.style.display = textoCompleto.includes(termo) ? 'block' : 'none';
+        let correspondePesquisa = valorCampo.includes(termo);
+
+        if (correspondePesquisa) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+
     });
-});
+}
+
+// Eventos
+barraPesquisa.addEventListener("keyup", aplicarFiltros);
+tipoFiltro.addEventListener("change", aplicarFiltros);

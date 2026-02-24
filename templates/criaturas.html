@@ -58,9 +58,24 @@
     <div class="main-content">
         <h1>Gestão de Criaturas</h1>
         <button class="btn-novo" id="abrirModal"><i class="fa-solid fa-plus"></i> Nova Criatura</button>
-        <div class="pesquisa-container">
-        <input type="text" id="barraPesquisa" placeholder="🔍 Buscar criatura...">
-        
+        <!-- PESQUISA -->
+<div class="pesquisa-topo">
+
+    <label>Pesquisar por:</label>
+
+    <div class="pesquisa-linha">
+        <select id="tipoFiltro">
+            <option value="nome">Nome</option>
+            <option value="elemento">Elemento</option>
+            <option value="local">Local Encontrado</option>
+            <option value="descricao">Descrição</option>
+            <option value="raridade">Raridade</option>
+        </select>
+
+        <input type="text" id="barraPesquisa" placeholder="Buscar criatura...">
+    </div>
+
+</div>
         <div class="criaturas-container">
             {% for criatura in criaturas %}
             <div class="criatura-card"
