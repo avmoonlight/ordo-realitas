@@ -91,3 +91,36 @@ body {
     padding: 1.5rem 2rem;
   }
 }
+
+.login-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Logo acima, mas independente do card */
+.logo-area {
+  margin-bottom: 20px;
+  height: 140px; /* espaço fixo igual nos dois temas */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Logo tamanho fixo */
+.logo {
+  display: none;
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+}
+
+/* Tema dark */
+html[data-theme="dark"] .logo-dark {
+  display: block;
+}
+
+/* Tema light */
+html[data-theme="light"] .logo-light {
+  display: block;
+}

@@ -22,6 +22,13 @@
     <i class="bi bi-moon-fill" id="theme-icon"></i>
   </button>
 
+ <div class="login-wrapper">
+
+  <div class="logo-area">
+    <img src="{{ url_for('static', filename='img/logo-escuro.png') }}" class="logo logo-dark">
+    <img src="{{ url_for('static', filename='img/logo-claro.png') }}" class="logo logo-light">
+  </div>
+
   <div class="login-container">
     <h1>Login</h1>
     <form method="POST" action="/login">
@@ -38,6 +45,8 @@
       <p class="error-msg">{{ erro }}</p>
     {% endif %}
   </div>
+
+</div>
 
   <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
 </body>
