@@ -153,9 +153,7 @@ Clique em **Start** no MySQL.
 Abra o Workbench e execute o script abaixo:
 
 ```
-CREATE DATABASEIFNOTEXISTS cris
-CHARACTERSET utf8mb4
-COLLATE utf8mb4_unicode_ci;
+CREATE DATABASEIFNOTEXISTS cris;
 
 USE cris;
 
