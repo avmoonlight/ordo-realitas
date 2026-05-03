@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Prisioneiros — Ordo Realitas</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/agentes.css') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <h2>Ordo Realitas</h2>
+
+    <ul>
+        <li>
+            <a href="{{ url_for('agentes') }}">
+                <i class="fa-solid fa-brain"></i> Agentes
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('itens') }}">
+                <i class="fa-solid fa-box"></i> Itens
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('criaturas') }}">
+                <i class="fa-solid fa-dragon"></i> Criaturas
+            </a>
+        </li>
+        <li class="active">
+            <a href="{{ url_for('prisioneiros') }}">
+                <i class="fa-solid fa-handcuffs"></i> Prisioneiros
+            </a>
+        </li>
+    </ul>
+
+    <div class="logout-link">
+        <a href="{{ url_for('logout') }}">
+            <i class="fa-solid fa-right-from-bracket"></i> Sair
+        </a>
+    </div>
+</aside>
+
+<div class="main-content">
+
+    <h1>Gestão de Prisioneiros</h1>
+
+    <button class="btn-novo" id="abrirModal">
+        <i class="fa-solid fa-plus"></i> Novo Prisioneiro
+    </button>
+
+    <div class="usuarios-container">
+        {% for p in prisioneiros %}
+        <div class="usuario-card"
+             data-id="{{ p.id }}"
+             data-nome="{{ p.nome }}"
+             data-idade="{{ p.idade }}"
+             data-quem_prendeu="{{ p.quem_prendeu }}"
+             data-grau_perigo="{{ p.grau_perigo }}"
+             data-socializacao="{{ p.socializacao }}"
+             data-reintegracao="{{ p.reintegracao }}"
+             data-liberado="{{ p.liberado }}"
+        >
+
+            {% if p.imagem %}
+                <img src="{{ url_for('static', filename=p.imagem) }}?v={{ p.id }}">
+            {% else %}
+                <img src="{{ url_for('static', filename='img/default_user.png') }}">
+            {% endif %}
+
+            <h3>{{ p.nome }}</h3>
+            <p>Idade: {{ p.idade }}</p>
+
+            <div class="acoes">
+                <button class="editar" data-id="{{ p.id }}"><i class="fa-solid fa-pen"></i></button>
+                <button class="excluir" data-id="{{ p.id }}"><i class="fa-solid fa-trash"></i></button>
+            </div>
+
+            <div class="detalhes-agente">
+                <p><strong>Quem prendeu:</strong> {{ p.quem_prendeu }}</p>
+                <p><strong>Perigo:</strong> {{ p.grau_perigo }}</p>
+                <p><strong>Socialização:</strong> {{ p.socializacao }}</p>
+                <p><strong>Reintegração:</strong> {{ p.reintegracao }}</p>
+                <p><strong>Liberado:</strong> {{ p.liberado }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- MODAL NOVO -->
+<div id="modalNovoUsuario" class="modal">
+    <div class="modal-content">
+        <span class="fechar">&times;</span>
+        <h2>Novo Prisioneiro</h2>
+
+        <form action="{{ url_for('prisioneiros') }}" method="POST" enctype="multipart/form-data">
+
+            <input type="text" name="nome" placeholder="Nome" required>
+            <input type="number" name="idade" placeholder="Idade">
+            <input type="text" name="quem_prendeu" placeholder="Quem prendeu">
+
+            <select name="grau_perigo">
+                <option value="PEQUENO">Pequeno</option>
+                <option value="MEDIO">Médio</option>
+                <option value="GRANDE">Grande</option>
+            </select>
+
+            <select name="socializacao">
+                <option value="LEVE">Leve</option>
+                <option value="MEDIA">Média</option>
+                <option value="GRANDE">Grande</option>
+            </select>
+
+            <select name="reintegracao">
+                <option value="SIM">Sim</option>
+                <option value="NAO">Não</option>
+            </select>
+
+            <select name="liberado">
+                <option value="SIM">Sim</option>
+                <option value="NAO">Não</option>
+            </select>
+
+            <input type="file" name="imagem" accept="image/*">
+
+            <button type="submit" class="btn-salvar">Salvar</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL EDITAR -->
+<div id="modalEditarUsuario" class="modal">
+    <div class="modal-content">
+        <span class="fechar">&times;</span>
+        <h2>Editar Prisioneiro</h2>
+
+        <form id="formEditarUsuario" method="POST" enctype="multipart/form-data">
+            <label>Nome:</label><br>
+            <input type="text" name="nome" id="editNome">
+
+            <label>Idade:</label><br>
+            <input type="number" name="idade" id="editIdade">
+
+            <label>Quem Efetuou a Prisão:</label><br>
+            <input type="text" name="quem_prendeu" id="editQuem">
+
+            <label>Grau de Perigo:</label><br>
+            <select name="grau_perigo" id="editPerigo">
+                <option value="PEQUENO">Pequeno</option>
+                <option value="MEDIO">Médio</option>
+                <option value="GRANDE">Grande</option>
+            </select>
+            
+
+            <label>Socialização:</label><br>
+            <select name="socializacao" id="editSocial">
+                <option value="LEVE">Leve</option>
+                <option value="MEDIA">Média</option>
+                <option value="GRANDE">Grande</option>
+            </select>
+
+            <label>Participa do programa de reintegração?:</label><br>
+            <select name="reintegracao" id="editReintegracao">
+                <option value="SIM">Sim</option>
+                <option value="NAO">Não</option>
+            </select>
+
+            <label>Liberado:</label><br>
+            <select name="liberado" id="editLiberado">
+                <option value="SIM">Sim</option>
+                <option value="NAO">Não</option>
+            </select>
+
+            <input type="file" name="imagem" accept="image/*">
+
+            <button type="submit" class="btn-salvar">Atualizar</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL EXCLUIR -->
+<div id="modalExcluirUsuario" class="modal">
+    <div class="modal-content">
+        <span class="fechar">&times;</span>
+        <h2>Confirmar Exclusão</h2>
+        <form id="formExcluirUsuario" method="POST">
+            <button type="submit" class="btn-salvar" style="background:#e74c3c;">Confirmar</button>
+        </form>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal-prisioneiros.js') }}"></script>
+
+</body>
+</html>

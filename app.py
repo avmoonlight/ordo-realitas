@@ -657,6 +657,93 @@ def deletar_relatorio(id):
     conn.close()
     return render_template('deletar_relatorio.html', relatorio=relatorio)
 
+# ===============================
+# CRUD DE PRISIONEIROS
+# ===============================
+
+@app.route('/prisioneiros', methods=['GET', 'POST'])
+def prisioneiros():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        idade = request.form.get('idade')
+        quem_prendeu = request.form.get('quem_prendeu')
+        grau_perigo = request.form.get('grau_perigo')
+        socializacao = request.form.get('socializacao')
+        reintegracao = request.form.get('reintegracao')
+        liberado = request.form.get('liberado')
+
+        imagem = request.files.get('imagem')
+        imagem_path = salvar_imagem(imagem)
+
+        cursor.execute("""
+            INSERT INTO prisioneiros
+            (nome, idade, quem_prendeu, grau_perigo, socializacao, reintegracao, liberado, imagem)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+        """, (nome, idade, quem_prendeu, grau_perigo,
+              socializacao, reintegracao, liberado, imagem_path))
+
+        conn.commit()
+
+    cursor.execute("SELECT * FROM prisioneiros ORDER BY nome ASC")
+    prisioneiros = cursor.fetchall()
+    conn.close()
+
+    return render_template('prisioneiros.html', prisioneiros=prisioneiros)
+
+
+@app.route('/editar_prisioneiro/<int:id>', methods=['POST'])
+def editar_prisioneiro(id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM prisioneiros WHERE id=%s", (id,))
+    prisioneiro = cursor.fetchone()
+
+    nome = request.form.get('nome')
+    idade = request.form.get('idade')
+    quem_prendeu = request.form.get('quem_prendeu')
+    grau_perigo = request.form.get('grau_perigo')
+    socializacao = request.form.get('socializacao')
+    reintegracao = request.form.get('reintegracao')
+    liberado = request.form.get('liberado')
+
+    imagem_path = prisioneiro['imagem']
+
+    imagem = request.files.get('imagem')
+    if imagem and imagem.filename != '':
+        imagem_path = salvar_imagem(imagem)
+
+    cursor.execute("""
+        UPDATE prisioneiros
+        SET nome=%s, idade=%s, quem_prendeu=%s,
+            grau_perigo=%s, socializacao=%s,
+            reintegracao=%s, liberado=%s, imagem=%s
+        WHERE id=%s
+    """, (nome, idade, quem_prendeu, grau_perigo,
+          socializacao, reintegracao, liberado, imagem_path, id))
+
+    conn.commit()
+    conn.close()
+
+    flash('Prisioneiro atualizado com sucesso!', 'success')
+    return redirect(url_for('prisioneiros'))
+
+
+@app.route('/deletar_prisioneiro/<int:id>', methods=['POST'])
+def deletar_prisioneiro(id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM prisioneiros WHERE id=%s", (id,))
+    conn.commit()
+    conn.close()
+
+    flash('Prisioneiro excluído com sucesso!', 'success')
+    return redirect(url_for('prisioneiros'))
+
 # LOGOUT
 @app.route('/logout')
 def logout():
