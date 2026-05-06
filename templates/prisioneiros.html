@@ -13,12 +13,24 @@
 </head>
 <body>
 
+    <!-- BOTÃO HAMBURGUER -->
+<div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+
+<!-- Botão de alternância de tema -->
+<button id="theme-toggle" class="theme-btn">
+    <i class="bi bi-moon-fill" id="theme-icon"></i>
+</button>
+
 <!-- SIDEBAR -->
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
     <h2>Ordo Realitas</h2>
 
     <ul>
-        <li>
+        <li class="active">
             <a href="{{ url_for('agentes') }}">
                 <i class="fa-solid fa-brain"></i> Agentes
             </a>
@@ -32,13 +44,15 @@
             <a href="{{ url_for('criaturas') }}">
                 <i class="fa-solid fa-dragon"></i> Criaturas
             </a>
-        </li>
-        <li class="active">
+        </li> 
+        <li>
             <a href="{{ url_for('prisioneiros') }}">
                 <i class="fa-solid fa-handcuffs"></i> Prisioneiros
             </a>
         </li>
     </ul>
+    
+   
 
     <div class="logout-link">
         <a href="{{ url_for('logout') }}">
@@ -101,28 +115,30 @@
         <h2>Novo Prisioneiro</h2>
 
         <form action="{{ url_for('prisioneiros') }}" method="POST" enctype="multipart/form-data">
-
+            <label>Nome:</label>
             <input type="text" name="nome" placeholder="Nome" required>
+            <label>Idade:</label>
             <input type="number" name="idade" placeholder="Idade">
+            <label>Quem Efetuou a Prisão:</label>
             <input type="text" name="quem_prendeu" placeholder="Quem prendeu">
-
+            <label>Grau de Perigo:</label>
             <select name="grau_perigo">
                 <option value="PEQUENO">Pequeno</option>
                 <option value="MEDIO">Médio</option>
                 <option value="GRANDE">Grande</option>
             </select>
-
+            <label>Socialização:</label>
             <select name="socializacao">
                 <option value="LEVE">Leve</option>
                 <option value="MEDIA">Média</option>
                 <option value="GRANDE">Grande</option>
             </select>
-
+            <label>Participa do programa de reintegração?:</label>
             <select name="reintegracao">
                 <option value="SIM">Sim</option>
                 <option value="NAO">Não</option>
             </select>
-
+            <label>Liberado:</label>
             <select name="liberado">
                 <option value="SIM">Sim</option>
                 <option value="NAO">Não</option>
