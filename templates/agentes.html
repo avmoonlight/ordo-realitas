@@ -102,6 +102,7 @@
                  data-equipe="{{ agente.equipe }}"
                  data-status="{{ agente.status }}"
                  data-observacoes="{{ agente.observacoes }}"
+                 data-imagem="{% if agente.imagem %}{{ url_for('static', filename=agente.imagem) }}{% else %}{{ url_for('static', filename='img/default_user.png') }}{% endif %}"
             >
                 {% if agente.imagem %}
                     <img src="{{ url_for('static', filename=agente.imagem) }}?v={{ agente.id }}{{ loop.index }}" alt="{{ agente.nome }}">
@@ -240,19 +241,38 @@
 <div id="modalDetalhesAgente" class="modal modal-detalhes">
     <div class="modal-content">
         <span class="fechar">&times;</span>
-        <h2 id="detalheNome"></h2>
-        <p><strong>Data Nascimento:</strong> <span id="detalheData"></span></p>
-        <p><strong>Contato Emergência:</strong> <span id="detalheContato"></span></p>
-        <p><strong>Elemento:</strong> <span id="detalheElemento"></span></p>
-        <p><strong>Classe:</strong> <span id="detalheClasse"></span></p>
-        <p><strong>Ocupação:</strong> <span id="detalheOcupacao"></span></p>
-        <p><strong>Marca:</strong> <span id="detalheMarca"></span></p>
-        <p><strong>Equipe:</strong> <span id="detalheEquipe"></span></p>
-        <p><strong>Status:</strong> <span id="detalheStatus"></span></p>
-        <p><strong>Observações:</strong> <span id="detalheObservacoes"></span></p>
-        <div class="acoes">
-            <button class="editar" id="detalheEditar"><i class="fa-solid fa-pen"></i> Editar</button>
-            <button class="excluir" id="detalheExcluir"><i class="fa-solid fa-trash"></i> Excluir</button>
+
+        <div class="abobora-container">
+
+            <!-- IMAGEM -->
+            <div class="abobora-japonesa">
+                <img id="detalheImagem" src="">
+            </div>
+
+            <!-- INFORMAÇÕES -->
+            <div class="abobora-moranga">
+                <h2 id="detalheNome"></h2>
+
+                <p><strong>Data Nascimento:</strong> <span id="detalheData"></span></p>
+                <p><strong>Contato Emergência:</strong> <span id="detalheContato"></span></p>
+                <p><strong>Elemento:</strong> <span id="detalheElemento"></span></p>
+                <p><strong>Classe:</strong> <span id="detalheClasse"></span></p>
+                <p><strong>Ocupação:</strong> <span id="detalheOcupacao"></span></p>
+                <p><strong>Marca:</strong> <span id="detalheMarca"></span></p>
+                <p><strong>Equipe:</strong> <span id="detalheEquipe"></span></p>
+                <p><strong>Status:</strong> <span id="detalheStatus"></span></p>
+                <p><strong>Observações:</strong> <span id="detalheObservacoes"></span></p>
+
+                <div class="acoes">
+                    <button class="editar" id="detalheEditar">
+                        <i class="fa-solid fa-pen"></i> Editar
+                    </button>
+                    <button class="excluir" id="detalheExcluir">
+                        <i class="fa-solid fa-trash"></i> Excluir
+                    </button>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

@@ -50,9 +50,15 @@ excluirBtns.forEach(btn => {
 // ====================
 //  DETALHES DO AGENTE
 // ====================
-const cards = document.querySelectorAll('.usuario-card');
+// ====================
+//  DETALHES DO AGENTE
+// ====================
+
+const cards = document.querySelectorAll('.usuario-card'); // 🔥 FALTAVA ISSO
+
 cards.forEach(card => {
     card.addEventListener('click', () => {
+
         document.getElementById('detalheNome').innerText = card.dataset.nome + ' ' + card.dataset.sobrenome;
         document.getElementById('detalheData').innerText = card.dataset.data_nasc;
         document.getElementById('detalheContato').innerText = card.dataset.contato;
@@ -64,34 +70,11 @@ cards.forEach(card => {
         document.getElementById('detalheStatus').innerText = card.dataset.status;
         document.getElementById('detalheObservacoes').innerText = card.dataset.observacoes;
 
-        // Botão Editar dentro do modal
-        document.getElementById('detalheEditar').onclick = (e) => {
-            e.stopPropagation();
-            const form = document.getElementById('formEditarUsuario');
-            form.action = `/editar/${card.dataset.id}`;  // ✅ corrigido
-            document.getElementById('editNome').value = card.dataset.nome;
-            document.getElementById('editSobrenome').value = card.dataset.sobrenome;
-            document.getElementById('editDataNasc').value = card.dataset.data_nasc;
-            document.getElementById('editContato').value = card.dataset.contato;
-            document.getElementById('editElemento').value = card.dataset.elemento;
-            document.getElementById('editClasse').value = card.dataset.classe;
-            document.getElementById('editOcupacao').value = card.dataset.ocupacao;
-            document.getElementById('editMarca').value = card.dataset.marca;
-            document.getElementById('editEquipe').value = card.dataset.equipe;
-            document.getElementById('editStatus').value = card.dataset.status;
-            document.getElementById('editObservacoes').value = card.dataset.observacoes;
-            document.getElementById('modalEditarUsuario').style.display = 'flex';
-            document.getElementById('modalDetalhesAgente').style.display = 'none';
-        };
-
-        // Botão Excluir dentro do modal
-        document.getElementById('detalheExcluir').onclick = (e) => {
-            e.stopPropagation();
-            const form = document.getElementById('formExcluirUsuario');
-            form.action = `/deletar/${card.dataset.id}`;  // ✅ corrigido
-            document.getElementById('modalExcluirUsuario').style.display = 'flex';
-            document.getElementById('modalDetalhesAgente').style.display = 'none';
-        };
+        // 🎃 IMAGEM
+        const img = document.getElementById('detalheImagem');
+        if (img) {
+            img.src = card.dataset.imagem;
+        }
 
         document.getElementById('modalDetalhesAgente').style.display = 'flex';
     });

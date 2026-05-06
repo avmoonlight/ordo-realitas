@@ -18,9 +18,21 @@
     <h2>Ordo Realitas</h2>
 
     <ul>
-        <li><a href="{{ url_for('agentes') }}"><i class="fa-solid fa-brain"></i> Agentes</a></li>
-        <li><a href="{{ url_for('itens') }}"><i class="fa-solid fa-box"></i> Itens</a></li>
-        <li><a href="{{ url_for('criaturas') }}"><i class="fa-solid fa-dragon"></i> Criaturas</a></li>
+        <li>
+            <a href="{{ url_for('agentes') }}">
+                <i class="fa-solid fa-brain"></i> Agentes
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('itens') }}">
+                <i class="fa-solid fa-box"></i> Itens
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('criaturas') }}">
+                <i class="fa-solid fa-dragon"></i> Criaturas
+            </a>
+        </li>
         <li class="active">
             <a href="{{ url_for('prisioneiros') }}">
                 <i class="fa-solid fa-handcuffs"></i> Prisioneiros
@@ -66,16 +78,23 @@
             <p>Idade: {{ p.idade }}</p>
 
             <div class="acoes">
-                <button class="editar"><i class="fa-solid fa-pen"></i></button>
-                <button class="excluir"><i class="fa-solid fa-trash"></i></button>
+                <button class="editar" data-id="{{ p.id }}"><i class="fa-solid fa-pen"></i></button>
+                <button class="excluir" data-id="{{ p.id }}"><i class="fa-solid fa-trash"></i></button>
             </div>
 
+            <div class="detalhes-agente">
+                <p><strong>Quem prendeu:</strong> {{ p.quem_prendeu }}</p>
+                <p><strong>Perigo:</strong> {{ p.grau_perigo }}</p>
+                <p><strong>Socialização:</strong> {{ p.socializacao }}</p>
+                <p><strong>Reintegração:</strong> {{ p.reintegracao }}</p>
+                <p><strong>Liberado:</strong> {{ p.liberado }}</p>
+            </div>
         </div>
         {% endfor %}
     </div>
 </div>
 
-<!-- ================= MODAL NOVO ================= -->
+<!-- MODAL NOVO -->
 <div id="modalNovoUsuario" class="modal">
     <div class="modal-content">
         <span class="fechar">&times;</span>
@@ -116,43 +135,44 @@
     </div>
 </div>
 
-<!-- ================= MODAL EDITAR ================= -->
+<!-- MODAL EDITAR -->
 <div id="modalEditarUsuario" class="modal">
     <div class="modal-content">
         <span class="fechar">&times;</span>
         <h2>Editar Prisioneiro</h2>
 
         <form id="formEditarUsuario" method="POST" enctype="multipart/form-data">
-            <label>Nome:</label>
+            <label>Nome:</label><br>
             <input type="text" name="nome" id="editNome">
 
-            <label>Idade:</label>
+            <label>Idade:</label><br>
             <input type="number" name="idade" id="editIdade">
 
-            <label>Quem prendeu:</label>
+            <label>Quem Efetuou a Prisão:</label><br>
             <input type="text" name="quem_prendeu" id="editQuem">
 
-            <label>Grau de Perigo:</label>
+            <label>Grau de Perigo:</label><br>
             <select name="grau_perigo" id="editPerigo">
                 <option value="PEQUENO">Pequeno</option>
                 <option value="MEDIO">Médio</option>
                 <option value="GRANDE">Grande</option>
             </select>
-
-            <label>A socialização é:</label>
-            <select name="socializacao" id="editSocial">
-                <option value="LEVE">Simples</option>
-                <option value="MEDIA">Mediano</option>
-                <option value="GRANDE">Difícil</option>
-            </select>
             
-            <label>Participa do programa de reintegração?:</label>
+
+            <label>Socialização:</label><br>
+            <select name="socializacao" id="editSocial">
+                <option value="LEVE">Leve</option>
+                <option value="MEDIA">Média</option>
+                <option value="GRANDE">Grande</option>
+            </select>
+
+            <label>Participa do programa de reintegração?:</label><br>
             <select name="reintegracao" id="editReintegracao">
                 <option value="SIM">Sim</option>
                 <option value="NAO">Não</option>
-            </select>   
+            </select>
 
-            <label>Já foi solto?:</label>
+            <label>Liberado:</label><br>
             <select name="liberado" id="editLiberado">
                 <option value="SIM">Sim</option>
                 <option value="NAO">Não</option>
@@ -165,7 +185,7 @@
     </div>
 </div>
 
-<!-- ================= MODAL EXCLUIR ================= -->
+<!-- MODAL EXCLUIR -->
 <div id="modalExcluirUsuario" class="modal">
     <div class="modal-content">
         <span class="fechar">&times;</span>
@@ -173,27 +193,6 @@
         <form id="formExcluirUsuario" method="POST">
             <button type="submit" class="btn-salvar" style="background:#e74c3c;">Confirmar</button>
         </form>
-    </div>
-</div>
-
-<!-- ================= MODAL DETALHES ================= -->
-<div id="modalDetalhesAgente" class="modal modal-detalhes">
-    <div class="modal-content">
-        <span class="fechar">&times;</span>
-
-        <h2 id="detalheNome"></h2>
-
-        <p><strong>Idade:</strong> <span id="detalheIdade"></span></p>
-        <p><strong>Quem prendeu:</strong> <span id="detalheQuem"></span></p>
-        <p><strong>Perigo:</strong> <span id="detalhePerigo"></span></p>
-        <p><strong>Socialização:</strong> <span id="detalheSocial"></span></p>
-        <p><strong>Reintegração:</strong> <span id="detalheReintegracao"></span></p>
-        <p><strong>Liberado:</strong> <span id="detalheLiberado"></span></p>
-
-        <div class="acoes">
-            <button class="editar" id="detalheEditar"><i class="fa-solid fa-pen"></i></button>
-            <button class="excluir" id="detalheExcluir"><i class="fa-solid fa-trash"></i></button>
-        </div>
     </div>
 </div>
 

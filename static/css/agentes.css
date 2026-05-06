@@ -399,3 +399,24 @@
     border-color: #b388ff;
     box-shadow: 0 0 15px rgba(179,136,255,0.4);
 }
+
+/* Container geral */
+.modal-detalhes .abobora-container {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+}
+
+/* IMAGEM */
+.modal-detalhes .abobora-japonesa img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 3px solid #8e44ad; /* roxo bonito */
+}
+
+/* INFO */
+.modal-detalhes .abobora-moranga {
+    flex: 1;
+}
