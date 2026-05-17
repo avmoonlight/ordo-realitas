@@ -89,7 +89,10 @@
             {% endif %}
 
             <h3>{{ p.nome }}</h3>
-            <p>Idade: {{ p.idade }}</p>
+            <p>Idade: {{ p.idade }}</p> 
+            <p>Quem prendeu: {{ p.quem_prendeu }}</p>
+            <p>Grau de Perigo: {{ p.grau_perigo }}</p>  
+            <p>Socialização: {{ p.socializacao }}</p>
 
             <div class="acoes">
                 <button class="editar" data-id="{{ p.id }}"><i class="fa-solid fa-pen"></i></button>
